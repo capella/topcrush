@@ -14,8 +14,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// PostUserIDURL generates an URL for the post user ID operation
-type PostUserIDURL struct {
+// PutUserIDLocationURL generates an URL for the put user ID location operation
+type PutUserIDLocationURL struct {
 	ID int64
 
 	_basePath string
@@ -26,7 +26,7 @@ type PostUserIDURL struct {
 // WithBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *PostUserIDURL) WithBasePath(bp string) *PostUserIDURL {
+func (o *PutUserIDLocationURL) WithBasePath(bp string) *PutUserIDLocationURL {
 	o.SetBasePath(bp)
 	return o
 }
@@ -34,21 +34,21 @@ func (o *PostUserIDURL) WithBasePath(bp string) *PostUserIDURL {
 // SetBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *PostUserIDURL) SetBasePath(bp string) {
+func (o *PutUserIDLocationURL) SetBasePath(bp string) {
 	o._basePath = bp
 }
 
 // Build a url path and query string
-func (o *PostUserIDURL) Build() (*url.URL, error) {
+func (o *PutUserIDLocationURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/user/{id}"
+	var _path = "/user/{id}/location"
 
 	id := swag.FormatInt64(o.ID)
 	if id != "" {
 		_path = strings.Replace(_path, "{id}", id, -1)
 	} else {
-		return nil, errors.New("id is required on PostUserIDURL")
+		return nil, errors.New("id is required on PutUserIDLocationURL")
 	}
 
 	_basePath := o._basePath
@@ -58,7 +58,7 @@ func (o *PostUserIDURL) Build() (*url.URL, error) {
 }
 
 // Must is a helper function to panic when the url builder returns an error
-func (o *PostUserIDURL) Must(u *url.URL, err error) *url.URL {
+func (o *PutUserIDLocationURL) Must(u *url.URL, err error) *url.URL {
 	if err != nil {
 		panic(err)
 	}
@@ -69,17 +69,17 @@ func (o *PostUserIDURL) Must(u *url.URL, err error) *url.URL {
 }
 
 // String returns the string representation of the path with query string
-func (o *PostUserIDURL) String() string {
+func (o *PutUserIDLocationURL) String() string {
 	return o.Must(o.Build()).String()
 }
 
 // BuildFull builds a full url with scheme, host, path and query string
-func (o *PostUserIDURL) BuildFull(scheme, host string) (*url.URL, error) {
+func (o *PutUserIDLocationURL) BuildFull(scheme, host string) (*url.URL, error) {
 	if scheme == "" {
-		return nil, errors.New("scheme is required for a full url on PostUserIDURL")
+		return nil, errors.New("scheme is required for a full url on PutUserIDLocationURL")
 	}
 	if host == "" {
-		return nil, errors.New("host is required for a full url on PostUserIDURL")
+		return nil, errors.New("host is required for a full url on PutUserIDLocationURL")
 	}
 
 	base, err := o.Build()
@@ -93,6 +93,6 @@ func (o *PostUserIDURL) BuildFull(scheme, host string) (*url.URL, error) {
 }
 
 // StringFull returns the string representation of a complete url
-func (o *PostUserIDURL) StringFull(scheme, host string) string {
+func (o *PutUserIDLocationURL) StringFull(scheme, host string) string {
 	return o.Must(o.BuildFull(scheme, host)).String()
 }

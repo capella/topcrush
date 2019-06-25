@@ -8,7 +8,9 @@ package models
 import (
 	strfmt "github.com/go-openapi/strfmt"
 
+	"github.com/go-openapi/errors"
 	"github.com/go-openapi/swag"
+	"github.com/go-openapi/validate"
 )
 
 // Position position
@@ -18,16 +20,63 @@ type Position struct {
 	// latitude
 	// Maximum: 90
 	// Minimum: -90
-	Latitude interface{} `json:"latitude,omitempty"`
+	Latitude *float64 `json:"latitude,omitempty"`
 
 	// longitude
 	// Maximum: 180
 	// Minimum: -180
-	Longitude interface{} `json:"longitude,omitempty"`
+	Longitude *float64 `json:"longitude,omitempty"`
 }
 
 // Validate validates this position
 func (m *Position) Validate(formats strfmt.Registry) error {
+	var res []error
+
+	if err := m.validateLatitude(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateLongitude(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if len(res) > 0 {
+		return errors.CompositeValidationError(res...)
+	}
+	return nil
+}
+
+func (m *Position) validateLatitude(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Latitude) { // not required
+		return nil
+	}
+
+	if err := validate.Minimum("latitude", "body", float64(*m.Latitude), -90, false); err != nil {
+		return err
+	}
+
+	if err := validate.Maximum("latitude", "body", float64(*m.Latitude), 90, false); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *Position) validateLongitude(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Longitude) { // not required
+		return nil
+	}
+
+	if err := validate.Minimum("longitude", "body", float64(*m.Longitude), -180, false); err != nil {
+		return err
+	}
+
+	if err := validate.Maximum("longitude", "body", float64(*m.Longitude), 180, false); err != nil {
+		return err
+	}
+
 	return nil
 }
 

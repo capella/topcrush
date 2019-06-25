@@ -71,6 +71,12 @@ type User struct {
 	// last position
 	LastPosition *Position `json:"lastPosition,omitempty"`
 
+	// distance in km to find matches
+	// Required: true
+	// Maximum: 30
+	// Minimum: 1
+	Radio *uint64 `json:"radio"`
+
 	// school
 	// Max Length: 256
 	School string `json:"school,omitempty"`
@@ -121,6 +127,10 @@ func (m *User) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateLastPosition(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateRadio(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -325,6 +335,23 @@ func (m *User) validateLastPosition(formats strfmt.Registry) error {
 			}
 			return err
 		}
+	}
+
+	return nil
+}
+
+func (m *User) validateRadio(formats strfmt.Registry) error {
+
+	if err := validate.Required("radio", "body", m.Radio); err != nil {
+		return err
+	}
+
+	if err := validate.MinimumInt("radio", "body", int64(*m.Radio), 1, false); err != nil {
+		return err
+	}
+
+	if err := validate.MaximumInt("radio", "body", int64(*m.Radio), 30, false); err != nil {
+		return err
 	}
 
 	return nil

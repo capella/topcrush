@@ -33,8 +33,67 @@ func init() {
     "version": "0.1.0"
   },
   "paths": {
+    "/matches": {
+      "get": {
+        "tags": [
+          "matches"
+        ],
+        "responses": {
+          "201": {
+            "description": "Get a list of matches 15 mathces",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "402": {
+            "description": "subscription requerid",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "description": "create a new user",
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/user/{id}": {
       "put": {
+        "description": "update the user information",
         "tags": [
           "user"
         ],
@@ -61,43 +120,14 @@ func init() {
               "$ref": "#/definitions/user"
             }
           },
-          "default": {
-            "description": "generic error response",
+          "403": {
+            "description": "Forbidde",
             "schema": {
               "$ref": "#/definitions/error"
             }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "ObjectId",
-            "name": "id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
           },
           "default": {
-            "description": "generic error response",
+            "description": "Generic error",
             "schema": {
               "$ref": "#/definitions/error"
             }
@@ -106,7 +136,8 @@ func init() {
       }
     },
     "/user/{id}/location": {
-      "post": {
+      "put": {
+        "description": "update user position",
         "tags": [
           "user"
         ],
@@ -128,9 +159,15 @@ func init() {
         ],
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "Update",
             "schema": {
               "$ref": "#/definitions/user"
+            }
+          },
+          "403": {
+            "description": "Forbidde",
+            "schema": {
+              "$ref": "#/definitions/error"
             }
           },
           "default": {
@@ -207,13 +244,16 @@ func init() {
       }
     },
     "position": {
+      "type": "object",
       "properties": {
         "latitude": {
+          "type": "number",
           "format": "float64",
           "maximum": 90,
           "minimum": -90
         },
         "longitude": {
+          "type": "number",
           "format": "float64",
           "maximum": 180,
           "minimum": -180
@@ -234,7 +274,8 @@ func init() {
         "fullName",
         "interestIn",
         "gender",
-        "birthDate"
+        "birthDate",
+        "radio"
       ],
       "properties": {
         "_id": {
@@ -292,6 +333,13 @@ func init() {
         },
         "lastPosition": {
           "$ref": "#/definitions/position"
+        },
+        "radio": {
+          "description": "distance in km to find matches",
+          "type": "integer",
+          "format": "uint64",
+          "maximum": 30,
+          "minimum": 1
         },
         "school": {
           "type": "string",
@@ -317,8 +365,67 @@ func init() {
     "version": "0.1.0"
   },
   "paths": {
+    "/matches": {
+      "get": {
+        "tags": [
+          "matches"
+        ],
+        "responses": {
+          "201": {
+            "description": "Get a list of matches 15 mathces",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "402": {
+            "description": "subscription requerid",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "description": "create a new user",
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/user/{id}": {
       "put": {
+        "description": "update the user information",
         "tags": [
           "user"
         ],
@@ -345,43 +452,14 @@ func init() {
               "$ref": "#/definitions/user"
             }
           },
-          "default": {
-            "description": "generic error response",
+          "403": {
+            "description": "Forbidde",
             "schema": {
               "$ref": "#/definitions/error"
             }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "ObjectId",
-            "name": "id",
-            "in": "path",
-            "required": true
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
           },
           "default": {
-            "description": "generic error response",
+            "description": "Generic error",
             "schema": {
               "$ref": "#/definitions/error"
             }
@@ -390,7 +468,8 @@ func init() {
       }
     },
     "/user/{id}/location": {
-      "post": {
+      "put": {
+        "description": "update user position",
         "tags": [
           "user"
         ],
@@ -412,9 +491,15 @@ func init() {
         ],
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "Update",
             "schema": {
               "$ref": "#/definitions/user"
+            }
+          },
+          "403": {
+            "description": "Forbidde",
+            "schema": {
+              "$ref": "#/definitions/error"
             }
           },
           "default": {
@@ -491,13 +576,16 @@ func init() {
       }
     },
     "position": {
+      "type": "object",
       "properties": {
         "latitude": {
+          "type": "number",
           "format": "float64",
           "maximum": 90,
           "minimum": -90
         },
         "longitude": {
+          "type": "number",
           "format": "float64",
           "maximum": 180,
           "minimum": -180
@@ -518,7 +606,8 @@ func init() {
         "fullName",
         "interestIn",
         "gender",
-        "birthDate"
+        "birthDate",
+        "radio"
       ],
       "properties": {
         "_id": {
@@ -576,6 +665,13 @@ func init() {
         },
         "lastPosition": {
           "$ref": "#/definitions/position"
+        },
+        "radio": {
+          "description": "distance in km to find matches",
+          "type": "integer",
+          "format": "uint64",
+          "maximum": 30,
+          "minimum": 1
         },
         "school": {
           "type": "string",

@@ -11,6 +11,7 @@ import (
 	middleware "github.com/go-openapi/runtime/middleware"
 
 	"github.com/capella/topcrush/restapi/operations"
+	"github.com/capella/topcrush/restapi/operations/matches"
 	"github.com/capella/topcrush/restapi/operations/user"
 )
 
@@ -34,24 +35,29 @@ func configureAPI(api *operations.TopCrushAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
+	if api.MatchesGetMatchesHandler == nil {
+		api.MatchesGetMatchesHandler = matches.GetMatchesHandlerFunc(func(params matches.GetMatchesParams) middleware.Responder {
+			return middleware.NotImplemented("operation matches.GetMatches has not yet been implemented")
+		})
+	}
 	if api.UserGetUserIDUploadHandler == nil {
 		api.UserGetUserIDUploadHandler = user.GetUserIDUploadHandlerFunc(func(params user.GetUserIDUploadParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetUserIDUpload has not yet been implemented")
 		})
 	}
-	if api.UserPostUserIDHandler == nil {
-		api.UserPostUserIDHandler = user.PostUserIDHandlerFunc(func(params user.PostUserIDParams) middleware.Responder {
-			return middleware.NotImplemented("operation user.PostUserID has not yet been implemented")
-		})
-	}
-	if api.UserPostUserIDLocationHandler == nil {
-		api.UserPostUserIDLocationHandler = user.PostUserIDLocationHandlerFunc(func(params user.PostUserIDLocationParams) middleware.Responder {
-			return middleware.NotImplemented("operation user.PostUserIDLocation has not yet been implemented")
+	if api.UserPostUserHandler == nil {
+		api.UserPostUserHandler = user.PostUserHandlerFunc(func(params user.PostUserParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.PostUser has not yet been implemented")
 		})
 	}
 	if api.UserPutUserIDHandler == nil {
 		api.UserPutUserIDHandler = user.PutUserIDHandlerFunc(func(params user.PutUserIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.PutUserID has not yet been implemented")
+		})
+	}
+	if api.UserPutUserIDLocationHandler == nil {
+		api.UserPutUserIDLocationHandler = user.PutUserIDLocationHandlerFunc(func(params user.PutUserIDLocationParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.PutUserIDLocation has not yet been implemented")
 		})
 	}
 

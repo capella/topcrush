@@ -31,7 +31,7 @@ func NewPutUserID(ctx *middleware.Context, handler PutUserIDHandler) *PutUserID 
 
 /*PutUserID swagger:route PUT /user/{id} user putUserId
 
-PutUserID put user ID API
+update the user information
 
 */
 type PutUserID struct {

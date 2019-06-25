@@ -18,18 +18,18 @@ import (
 	models "github.com/capella/topcrush/models"
 )
 
-// NewPostUserIDParams creates a new PostUserIDParams object
+// NewPutUserIDLocationParams creates a new PutUserIDLocationParams object
 // no default values defined in spec.
-func NewPostUserIDParams() PostUserIDParams {
+func NewPutUserIDLocationParams() PutUserIDLocationParams {
 
-	return PostUserIDParams{}
+	return PutUserIDLocationParams{}
 }
 
-// PostUserIDParams contains all the bound params for the post user ID operation
+// PutUserIDLocationParams contains all the bound params for the put user ID location operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters PostUserID
-type PostUserIDParams struct {
+// swagger:parameters PutUserIDLocation
+type PutUserIDLocationParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
@@ -37,7 +37,7 @@ type PostUserIDParams struct {
 	/*
 	  In: body
 	*/
-	Body *models.User
+	Body *models.Position
 	/*
 	  Required: true
 	  In: path
@@ -48,15 +48,15 @@ type PostUserIDParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewPostUserIDParams() beforehand.
-func (o *PostUserIDParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewPutUserIDLocationParams() beforehand.
+func (o *PutUserIDLocationParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.User
+		var body models.Position
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			res = append(res, errors.NewParseError("body", "body", "", err))
 		} else {
@@ -82,7 +82,7 @@ func (o *PostUserIDParams) BindRequest(r *http.Request, route *middleware.Matche
 }
 
 // bindID binds and validates parameter ID from path.
-func (o *PostUserIDParams) bindID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *PutUserIDLocationParams) bindID(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
