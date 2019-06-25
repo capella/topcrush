@@ -68,6 +68,41 @@ func init() {
             }
           }
         }
+      },
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "ObjectId",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
       }
     },
     "/user/{id}/location": {
@@ -254,6 +289,9 @@ func init() {
           "description": "is the last time the user change it birthDate, user cannot change it a high frequency",
           "type": "string",
           "format": "date"
+        },
+        "lastPosition": {
+          "$ref": "#/definitions/position"
         },
         "school": {
           "type": "string",
@@ -314,6 +352,41 @@ func init() {
             }
           }
         }
+      },
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "ObjectId",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
       }
     },
     "/user/{id}/location": {
@@ -500,6 +573,9 @@ func init() {
           "description": "is the last time the user change it birthDate, user cannot change it a high frequency",
           "type": "string",
           "format": "date"
+        },
+        "lastPosition": {
+          "$ref": "#/definitions/position"
         },
         "school": {
           "type": "string",

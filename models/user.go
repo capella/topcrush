@@ -68,6 +68,9 @@ type User struct {
 	// Format: date
 	LastBirthDateChange strfmt.Date `json:"lastBirthDateChange,omitempty"`
 
+	// last position
+	LastPosition *Position `json:"lastPosition,omitempty"`
+
 	// school
 	// Max Length: 256
 	School string `json:"school,omitempty"`
@@ -114,6 +117,10 @@ func (m *User) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateLastBirthDateChange(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateLastPosition(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -300,6 +307,24 @@ func (m *User) validateLastBirthDateChange(formats strfmt.Registry) error {
 
 	if err := validate.FormatOf("lastBirthDateChange", "body", "date", m.LastBirthDateChange.String(), formats); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (m *User) validateLastPosition(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.LastPosition) { // not required
+		return nil
+	}
+
+	if m.LastPosition != nil {
+		if err := m.LastPosition.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("lastPosition")
+			}
+			return err
+		}
 	}
 
 	return nil

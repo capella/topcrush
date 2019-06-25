@@ -42,6 +42,9 @@ func NewTopCrushAPI(spec *loads.Document) *TopCrushAPI {
 		UserGetUserIDUploadHandler: user.GetUserIDUploadHandlerFunc(func(params user.GetUserIDUploadParams) middleware.Responder {
 			return middleware.NotImplemented("operation UserGetUserIDUpload has not yet been implemented")
 		}),
+		UserPostUserIDHandler: user.PostUserIDHandlerFunc(func(params user.PostUserIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation UserPostUserID has not yet been implemented")
+		}),
 		UserPostUserIDLocationHandler: user.PostUserIDLocationHandlerFunc(func(params user.PostUserIDLocationParams) middleware.Responder {
 			return middleware.NotImplemented("operation UserPostUserIDLocation has not yet been implemented")
 		}),
@@ -81,6 +84,8 @@ type TopCrushAPI struct {
 
 	// UserGetUserIDUploadHandler sets the operation handler for the get user ID upload operation
 	UserGetUserIDUploadHandler user.GetUserIDUploadHandler
+	// UserPostUserIDHandler sets the operation handler for the post user ID operation
+	UserPostUserIDHandler user.PostUserIDHandler
 	// UserPostUserIDLocationHandler sets the operation handler for the post user ID location operation
 	UserPostUserIDLocationHandler user.PostUserIDLocationHandler
 	// UserPutUserIDHandler sets the operation handler for the put user ID operation
@@ -150,6 +155,10 @@ func (o *TopCrushAPI) Validate() error {
 
 	if o.UserGetUserIDUploadHandler == nil {
 		unregistered = append(unregistered, "user.GetUserIDUploadHandler")
+	}
+
+	if o.UserPostUserIDHandler == nil {
+		unregistered = append(unregistered, "user.PostUserIDHandler")
 	}
 
 	if o.UserPostUserIDLocationHandler == nil {
@@ -262,6 +271,11 @@ func (o *TopCrushAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/user/{id}/upload"] = user.NewGetUserIDUpload(o.context, o.UserGetUserIDUploadHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/user/{id}"] = user.NewPostUserID(o.context, o.UserPostUserIDHandler)
 
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)

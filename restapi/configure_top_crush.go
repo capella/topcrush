@@ -39,6 +39,11 @@ func configureAPI(api *operations.TopCrushAPI) http.Handler {
 			return middleware.NotImplemented("operation user.GetUserIDUpload has not yet been implemented")
 		})
 	}
+	if api.UserPostUserIDHandler == nil {
+		api.UserPostUserIDHandler = user.PostUserIDHandlerFunc(func(params user.PostUserIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.PostUserID has not yet been implemented")
+		})
+	}
 	if api.UserPostUserIDLocationHandler == nil {
 		api.UserPostUserIDLocationHandler = user.PostUserIDLocationHandlerFunc(func(params user.PostUserIDLocationParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.PostUserIDLocation has not yet been implemented")
