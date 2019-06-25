@@ -1,0 +1,111 @@
+consumes:
+- application/json
+info:
+  title: Top Crush
+  version: 0.1.0
+paths: {}
+produces:
+- application/json
+schemes:
+- http
+swagger: "2.0"
+
+paths:
+  /{id}/upload:
+    get:
+      parameters:
+        - type: integer
+          format: int64
+          name: id
+          in: path
+          required: true
+      tags:
+        - user
+      responses:
+        200:
+          description: produce a pre-signed link for upload
+          schema:
+            $ref: "#/definitions/preSignedLink"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+
+definitions:
+  preSignedLink:
+    properties:
+      url:
+        type: string
+        format: url
+  images:
+    properties:
+      _id:
+        type: string
+        format: ObjectId
+        readOnly: true
+      url:
+        type: string
+        format: url
+      uploadDate:
+        type: string
+        format: date
+  user:
+    type: object
+    properties:
+      _id:
+        type: string
+        format: ObjectId
+        readOnly: true
+      description:
+        type: string
+        maxLength: 4096
+      age:
+        type: integer
+        format: int64
+      gender:
+        enum:
+        - male
+        - female
+      interestIn:
+        enum:
+        - male
+        - female
+      jobTitle:
+        type: string
+        maxLength: 256
+      company:
+        type: string
+        maxLength: 256
+      school:
+        type: string
+        maxLength: 256
+      images:
+        type: array
+        items:
+           $ref: "#/definitions/images"
+      birthDate:
+        type: string
+        format: date
+      lastBirthDateChange:
+        type: string
+        format: date
+        description: is the last time the user change it birthDate, user cannot change it a high frequency
+      fullName:
+        type: string
+        maxLength: 256
+        minLength: 10
+    required:
+      - fullName
+      - interestIn
+      - gender
+      - birthDate
+  error:
+    type: object
+    required:
+      - message
+    properties:
+      code:
+        type: integer
+        format: int64
+      message:
+        type: string
