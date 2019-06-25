@@ -9,28 +9,35 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
+
+	models "github.com/capella/topcrush/models"
 )
 
-// NewGetIDUploadParams creates a new GetIDUploadParams object
+// NewPutUserIDParams creates a new PutUserIDParams object
 // no default values defined in spec.
-func NewGetIDUploadParams() GetIDUploadParams {
+func NewPutUserIDParams() PutUserIDParams {
 
-	return GetIDUploadParams{}
+	return PutUserIDParams{}
 }
 
-// GetIDUploadParams contains all the bound params for the get ID upload operation
+// PutUserIDParams contains all the bound params for the put user ID operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters GetIDUpload
-type GetIDUploadParams struct {
+// swagger:parameters PutUserID
+type PutUserIDParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
+	/*
+	  In: body
+	*/
+	Body *models.User
 	/*
 	  Required: true
 	  In: path
@@ -41,12 +48,28 @@ type GetIDUploadParams struct {
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewGetIDUploadParams() beforehand.
-func (o *GetIDUploadParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewPutUserIDParams() beforehand.
+func (o *PutUserIDParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r
 
+	if runtime.HasBody(r) {
+		defer r.Body.Close()
+		var body models.User
+		if err := route.Consumer.Consume(r.Body, &body); err != nil {
+			res = append(res, errors.NewParseError("body", "body", "", err))
+		} else {
+			// validate body object
+			if err := body.Validate(route.Formats); err != nil {
+				res = append(res, err)
+			}
+
+			if len(res) == 0 {
+				o.Body = &body
+			}
+		}
+	}
 	rID, rhkID, _ := route.Params.GetOK("id")
 	if err := o.bindID(rID, rhkID, route.Formats); err != nil {
 		res = append(res, err)
@@ -59,7 +82,7 @@ func (o *GetIDUploadParams) BindRequest(r *http.Request, route *middleware.Match
 }
 
 // bindID binds and validates parameter ID from path.
-func (o *GetIDUploadParams) bindID(rawData []string, hasKey bool, formats strfmt.Registry) error {
+func (o *PutUserIDParams) bindID(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]

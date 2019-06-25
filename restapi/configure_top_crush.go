@@ -34,9 +34,19 @@ func configureAPI(api *operations.TopCrushAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	if api.UserGetIDUploadHandler == nil {
-		api.UserGetIDUploadHandler = user.GetIDUploadHandlerFunc(func(params user.GetIDUploadParams) middleware.Responder {
-			return middleware.NotImplemented("operation user.GetIDUpload has not yet been implemented")
+	if api.UserGetUserIDUploadHandler == nil {
+		api.UserGetUserIDUploadHandler = user.GetUserIDUploadHandlerFunc(func(params user.GetUserIDUploadParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetUserIDUpload has not yet been implemented")
+		})
+	}
+	if api.UserPostUserIDLocationHandler == nil {
+		api.UserPostUserIDLocationHandler = user.PostUserIDLocationHandlerFunc(func(params user.PostUserIDLocationParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.PostUserIDLocation has not yet been implemented")
+		})
+	}
+	if api.UserPutUserIDHandler == nil {
+		api.UserPutUserIDHandler = user.PutUserIDHandlerFunc(func(params user.PutUserIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.PutUserID has not yet been implemented")
 		})
 	}
 

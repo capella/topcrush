@@ -33,7 +33,81 @@ func init() {
     "version": "0.1.0"
   },
   "paths": {
-    "/{id}/upload": {
+    "/user/{id}": {
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "ObjectId",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Uploaded",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}/location": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "ObjectId",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/position"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}/upload": {
       "get": {
         "tags": [
           "user"
@@ -41,7 +115,7 @@ func init() {
         "parameters": [
           {
             "type": "integer",
-            "format": "int64",
+            "format": "ObjectId",
             "name": "id",
             "in": "path",
             "required": true
@@ -94,6 +168,20 @@ func init() {
         "url": {
           "type": "string",
           "format": "url"
+        }
+      }
+    },
+    "position": {
+      "properties": {
+        "latitude": {
+          "format": "float64",
+          "maximum": 90,
+          "minimum": -90
+        },
+        "longitude": {
+          "format": "float64",
+          "maximum": 180,
+          "minimum": -180
         }
       }
     },
@@ -191,7 +279,81 @@ func init() {
     "version": "0.1.0"
   },
   "paths": {
-    "/{id}/upload": {
+    "/user/{id}": {
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "ObjectId",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Uploaded",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}/location": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "ObjectId",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/position"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}/upload": {
       "get": {
         "tags": [
           "user"
@@ -199,7 +361,7 @@ func init() {
         "parameters": [
           {
             "type": "integer",
-            "format": "int64",
+            "format": "ObjectId",
             "name": "id",
             "in": "path",
             "required": true
@@ -252,6 +414,20 @@ func init() {
         "url": {
           "type": "string",
           "format": "url"
+        }
+      }
+    },
+    "position": {
+      "properties": {
+        "latitude": {
+          "format": "float64",
+          "maximum": 90,
+          "minimum": -90
+        },
+        "longitude": {
+          "format": "float64",
+          "maximum": 180,
+          "minimum": -180
         }
       }
     },

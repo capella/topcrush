@@ -39,8 +39,14 @@ func NewTopCrushAPI(spec *loads.Document) *TopCrushAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		UserGetIDUploadHandler: user.GetIDUploadHandlerFunc(func(params user.GetIDUploadParams) middleware.Responder {
-			return middleware.NotImplemented("operation UserGetIDUpload has not yet been implemented")
+		UserGetUserIDUploadHandler: user.GetUserIDUploadHandlerFunc(func(params user.GetUserIDUploadParams) middleware.Responder {
+			return middleware.NotImplemented("operation UserGetUserIDUpload has not yet been implemented")
+		}),
+		UserPostUserIDLocationHandler: user.PostUserIDLocationHandlerFunc(func(params user.PostUserIDLocationParams) middleware.Responder {
+			return middleware.NotImplemented("operation UserPostUserIDLocation has not yet been implemented")
+		}),
+		UserPutUserIDHandler: user.PutUserIDHandlerFunc(func(params user.PutUserIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation UserPutUserID has not yet been implemented")
 		}),
 	}
 }
@@ -73,8 +79,12 @@ type TopCrushAPI struct {
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
 
-	// UserGetIDUploadHandler sets the operation handler for the get ID upload operation
-	UserGetIDUploadHandler user.GetIDUploadHandler
+	// UserGetUserIDUploadHandler sets the operation handler for the get user ID upload operation
+	UserGetUserIDUploadHandler user.GetUserIDUploadHandler
+	// UserPostUserIDLocationHandler sets the operation handler for the post user ID location operation
+	UserPostUserIDLocationHandler user.PostUserIDLocationHandler
+	// UserPutUserIDHandler sets the operation handler for the put user ID operation
+	UserPutUserIDHandler user.PutUserIDHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -138,8 +148,16 @@ func (o *TopCrushAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
-	if o.UserGetIDUploadHandler == nil {
-		unregistered = append(unregistered, "user.GetIDUploadHandler")
+	if o.UserGetUserIDUploadHandler == nil {
+		unregistered = append(unregistered, "user.GetUserIDUploadHandler")
+	}
+
+	if o.UserPostUserIDLocationHandler == nil {
+		unregistered = append(unregistered, "user.PostUserIDLocationHandler")
+	}
+
+	if o.UserPutUserIDHandler == nil {
+		unregistered = append(unregistered, "user.PutUserIDHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -243,7 +261,17 @@ func (o *TopCrushAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/{id}/upload"] = user.NewGetIDUpload(o.context, o.UserGetIDUploadHandler)
+	o.handlers["GET"]["/user/{id}/upload"] = user.NewGetUserIDUpload(o.context, o.UserGetUserIDUploadHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/user/{id}/location"] = user.NewPostUserIDLocation(o.context, o.UserPostUserIDLocationHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/user/{id}"] = user.NewPutUserID(o.context, o.UserPutUserIDHandler)
 
 }
 

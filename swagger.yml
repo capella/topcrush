@@ -3,19 +3,17 @@ consumes:
 info:
   title: Top Crush
   version: 0.1.0
-paths: {}
 produces:
 - application/json
 schemes:
 - http
 swagger: "2.0"
-
 paths:
-  /{id}/upload:
+  /user/{id}/upload:
     get:
       parameters:
         - type: integer
-          format: int64
+          format: ObjectId
           name: id
           in: path
           required: true
@@ -30,8 +28,87 @@ paths:
           description: generic error response
           schema:
             $ref: "#/definitions/error"
+  /user/{id}:
+    post:
+      parameters:
+        - type: integer
+          format: ObjectId
+          name: id
+          in: path
+          required: true
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/user"
+      tags:
+        - user
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: "#/definitions/user"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+  /user/{id}:
+    put:
+      parameters:
+        - type: integer
+          format: ObjectId
+          name: id
+          in: path
+          required: true
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/user"
+      tags:
+        - user
+      responses:
+        201:
+          description: Uploaded
+          schema:
+            $ref: "#/definitions/user"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+  /user/{id}/location:
+    post:
+      parameters:
+        - type: integer
+          format: ObjectId
+          name: id
+          in: path
+          required: true
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/position"
+      tags:
+        - user
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: "#/definitions/user"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
 
 definitions:
+  position:
+    properties:
+      latitude:
+        format: float64
+        minimum: -90
+        maximum: 90
+      longitude:
+        format: float64
+        minimum: -180
+        maximum: 180
   preSignedLink:
     properties:
       url:
@@ -94,6 +171,8 @@ definitions:
         type: string
         maxLength: 256
         minLength: 10
+      lastPosition:
+        $ref: "#/definitions/position"
     required:
       - fullName
       - interestIn

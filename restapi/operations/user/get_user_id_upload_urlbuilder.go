@@ -14,8 +14,8 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// GetIDUploadURL generates an URL for the get ID upload operation
-type GetIDUploadURL struct {
+// GetUserIDUploadURL generates an URL for the get user ID upload operation
+type GetUserIDUploadURL struct {
 	ID int64
 
 	_basePath string
@@ -26,7 +26,7 @@ type GetIDUploadURL struct {
 // WithBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *GetIDUploadURL) WithBasePath(bp string) *GetIDUploadURL {
+func (o *GetUserIDUploadURL) WithBasePath(bp string) *GetUserIDUploadURL {
 	o.SetBasePath(bp)
 	return o
 }
@@ -34,21 +34,21 @@ func (o *GetIDUploadURL) WithBasePath(bp string) *GetIDUploadURL {
 // SetBasePath sets the base path for this url builder, only required when it's different from the
 // base path specified in the swagger spec.
 // When the value of the base path is an empty string
-func (o *GetIDUploadURL) SetBasePath(bp string) {
+func (o *GetUserIDUploadURL) SetBasePath(bp string) {
 	o._basePath = bp
 }
 
 // Build a url path and query string
-func (o *GetIDUploadURL) Build() (*url.URL, error) {
+func (o *GetUserIDUploadURL) Build() (*url.URL, error) {
 	var _result url.URL
 
-	var _path = "/{id}/upload"
+	var _path = "/user/{id}/upload"
 
 	id := swag.FormatInt64(o.ID)
 	if id != "" {
 		_path = strings.Replace(_path, "{id}", id, -1)
 	} else {
-		return nil, errors.New("id is required on GetIDUploadURL")
+		return nil, errors.New("id is required on GetUserIDUploadURL")
 	}
 
 	_basePath := o._basePath
@@ -58,7 +58,7 @@ func (o *GetIDUploadURL) Build() (*url.URL, error) {
 }
 
 // Must is a helper function to panic when the url builder returns an error
-func (o *GetIDUploadURL) Must(u *url.URL, err error) *url.URL {
+func (o *GetUserIDUploadURL) Must(u *url.URL, err error) *url.URL {
 	if err != nil {
 		panic(err)
 	}
@@ -69,17 +69,17 @@ func (o *GetIDUploadURL) Must(u *url.URL, err error) *url.URL {
 }
 
 // String returns the string representation of the path with query string
-func (o *GetIDUploadURL) String() string {
+func (o *GetUserIDUploadURL) String() string {
 	return o.Must(o.Build()).String()
 }
 
 // BuildFull builds a full url with scheme, host, path and query string
-func (o *GetIDUploadURL) BuildFull(scheme, host string) (*url.URL, error) {
+func (o *GetUserIDUploadURL) BuildFull(scheme, host string) (*url.URL, error) {
 	if scheme == "" {
-		return nil, errors.New("scheme is required for a full url on GetIDUploadURL")
+		return nil, errors.New("scheme is required for a full url on GetUserIDUploadURL")
 	}
 	if host == "" {
-		return nil, errors.New("host is required for a full url on GetIDUploadURL")
+		return nil, errors.New("host is required for a full url on GetUserIDUploadURL")
 	}
 
 	base, err := o.Build()
@@ -93,6 +93,6 @@ func (o *GetIDUploadURL) BuildFull(scheme, host string) (*url.URL, error) {
 }
 
 // StringFull returns the string representation of a complete url
-func (o *GetIDUploadURL) StringFull(scheme, host string) string {
+func (o *GetUserIDUploadURL) StringFull(scheme, host string) string {
 	return o.Must(o.BuildFull(scheme, host)).String()
 }
