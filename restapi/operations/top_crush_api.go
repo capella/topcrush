@@ -19,7 +19,9 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/capella/topcrush/restapi/operations/matches"
+	"github.com/capella/topcrush/restapi/operations/chat"
+	"github.com/capella/topcrush/restapi/operations/matchs"
+	"github.com/capella/topcrush/restapi/operations/slide"
 	"github.com/capella/topcrush/restapi/operations/user"
 )
 
@@ -40,14 +42,41 @@ func NewTopCrushAPI(spec *loads.Document) *TopCrushAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		MatchesGetMatchesHandler: matches.GetMatchesHandlerFunc(func(params matches.GetMatchesParams) middleware.Responder {
-			return middleware.NotImplemented("operation MatchesGetMatches has not yet been implemented")
+		MatchsDeleteMatchsDeleteHandler: matchs.DeleteMatchsDeleteHandlerFunc(func(params matchs.DeleteMatchsDeleteParams) middleware.Responder {
+			return middleware.NotImplemented("operation MatchsDeleteMatchsDelete has not yet been implemented")
+		}),
+		ChatGetChatMessagesIDMessageIndexHandler: chat.GetChatMessagesIDMessageIndexHandlerFunc(func(params chat.GetChatMessagesIDMessageIndexParams) middleware.Responder {
+			return middleware.NotImplemented("operation ChatGetChatMessagesIDMessageIndex has not yet been implemented")
+		}),
+		MatchsGetMatchsAllHandler: matchs.GetMatchsAllHandlerFunc(func(params matchs.GetMatchsAllParams) middleware.Responder {
+			return middleware.NotImplemented("operation MatchsGetMatchsAll has not yet been implemented")
+		}),
+		MatchsGetMatchsLikesHandler: matchs.GetMatchsLikesHandlerFunc(func(params matchs.GetMatchsLikesParams) middleware.Responder {
+			return middleware.NotImplemented("operation MatchsGetMatchsLikes has not yet been implemented")
+		}),
+		SlideGetSlideUsersHandler: slide.GetSlideUsersHandlerFunc(func(params slide.GetSlideUsersParams) middleware.Responder {
+			return middleware.NotImplemented("operation SlideGetSlideUsers has not yet been implemented")
+		}),
+		UserGetUserHandler: user.GetUserHandlerFunc(func(params user.GetUserParams) middleware.Responder {
+			return middleware.NotImplemented("operation UserGetUser has not yet been implemented")
 		}),
 		UserGetUserIDUploadHandler: user.GetUserIDUploadHandlerFunc(func(params user.GetUserIDUploadParams) middleware.Responder {
 			return middleware.NotImplemented("operation UserGetUserIDUpload has not yet been implemented")
 		}),
 		UserPostUserHandler: user.PostUserHandlerFunc(func(params user.PostUserParams) middleware.Responder {
 			return middleware.NotImplemented("operation UserPostUser has not yet been implemented")
+		}),
+		ChatPutChatMessagesIDHandler: chat.PutChatMessagesIDHandlerFunc(func(params chat.PutChatMessagesIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation ChatPutChatMessagesID has not yet been implemented")
+		}),
+		SlidePutSlideBoastHandler: slide.PutSlideBoastHandlerFunc(func(params slide.PutSlideBoastParams) middleware.Responder {
+			return middleware.NotImplemented("operation SlidePutSlideBoast has not yet been implemented")
+		}),
+		SlidePutSlideLikeHandler: slide.PutSlideLikeHandlerFunc(func(params slide.PutSlideLikeParams) middleware.Responder {
+			return middleware.NotImplemented("operation SlidePutSlideLike has not yet been implemented")
+		}),
+		SlidePutSlideSuperlikeHandler: slide.PutSlideSuperlikeHandlerFunc(func(params slide.PutSlideSuperlikeParams) middleware.Responder {
+			return middleware.NotImplemented("operation SlidePutSlideSuperlike has not yet been implemented")
 		}),
 		UserPutUserIDHandler: user.PutUserIDHandlerFunc(func(params user.PutUserIDParams) middleware.Responder {
 			return middleware.NotImplemented("operation UserPutUserID has not yet been implemented")
@@ -86,12 +115,30 @@ type TopCrushAPI struct {
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
 
-	// MatchesGetMatchesHandler sets the operation handler for the get matches operation
-	MatchesGetMatchesHandler matches.GetMatchesHandler
+	// MatchsDeleteMatchsDeleteHandler sets the operation handler for the delete matchs delete operation
+	MatchsDeleteMatchsDeleteHandler matchs.DeleteMatchsDeleteHandler
+	// ChatGetChatMessagesIDMessageIndexHandler sets the operation handler for the get chat messages ID message index operation
+	ChatGetChatMessagesIDMessageIndexHandler chat.GetChatMessagesIDMessageIndexHandler
+	// MatchsGetMatchsAllHandler sets the operation handler for the get matchs all operation
+	MatchsGetMatchsAllHandler matchs.GetMatchsAllHandler
+	// MatchsGetMatchsLikesHandler sets the operation handler for the get matchs likes operation
+	MatchsGetMatchsLikesHandler matchs.GetMatchsLikesHandler
+	// SlideGetSlideUsersHandler sets the operation handler for the get slide users operation
+	SlideGetSlideUsersHandler slide.GetSlideUsersHandler
+	// UserGetUserHandler sets the operation handler for the get user operation
+	UserGetUserHandler user.GetUserHandler
 	// UserGetUserIDUploadHandler sets the operation handler for the get user ID upload operation
 	UserGetUserIDUploadHandler user.GetUserIDUploadHandler
 	// UserPostUserHandler sets the operation handler for the post user operation
 	UserPostUserHandler user.PostUserHandler
+	// ChatPutChatMessagesIDHandler sets the operation handler for the put chat messages ID operation
+	ChatPutChatMessagesIDHandler chat.PutChatMessagesIDHandler
+	// SlidePutSlideBoastHandler sets the operation handler for the put slide boast operation
+	SlidePutSlideBoastHandler slide.PutSlideBoastHandler
+	// SlidePutSlideLikeHandler sets the operation handler for the put slide like operation
+	SlidePutSlideLikeHandler slide.PutSlideLikeHandler
+	// SlidePutSlideSuperlikeHandler sets the operation handler for the put slide superlike operation
+	SlidePutSlideSuperlikeHandler slide.PutSlideSuperlikeHandler
 	// UserPutUserIDHandler sets the operation handler for the put user ID operation
 	UserPutUserIDHandler user.PutUserIDHandler
 	// UserPutUserIDLocationHandler sets the operation handler for the put user ID location operation
@@ -159,8 +206,28 @@ func (o *TopCrushAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
-	if o.MatchesGetMatchesHandler == nil {
-		unregistered = append(unregistered, "matches.GetMatchesHandler")
+	if o.MatchsDeleteMatchsDeleteHandler == nil {
+		unregistered = append(unregistered, "matchs.DeleteMatchsDeleteHandler")
+	}
+
+	if o.ChatGetChatMessagesIDMessageIndexHandler == nil {
+		unregistered = append(unregistered, "chat.GetChatMessagesIDMessageIndexHandler")
+	}
+
+	if o.MatchsGetMatchsAllHandler == nil {
+		unregistered = append(unregistered, "matchs.GetMatchsAllHandler")
+	}
+
+	if o.MatchsGetMatchsLikesHandler == nil {
+		unregistered = append(unregistered, "matchs.GetMatchsLikesHandler")
+	}
+
+	if o.SlideGetSlideUsersHandler == nil {
+		unregistered = append(unregistered, "slide.GetSlideUsersHandler")
+	}
+
+	if o.UserGetUserHandler == nil {
+		unregistered = append(unregistered, "user.GetUserHandler")
 	}
 
 	if o.UserGetUserIDUploadHandler == nil {
@@ -169,6 +236,22 @@ func (o *TopCrushAPI) Validate() error {
 
 	if o.UserPostUserHandler == nil {
 		unregistered = append(unregistered, "user.PostUserHandler")
+	}
+
+	if o.ChatPutChatMessagesIDHandler == nil {
+		unregistered = append(unregistered, "chat.PutChatMessagesIDHandler")
+	}
+
+	if o.SlidePutSlideBoastHandler == nil {
+		unregistered = append(unregistered, "slide.PutSlideBoastHandler")
+	}
+
+	if o.SlidePutSlideLikeHandler == nil {
+		unregistered = append(unregistered, "slide.PutSlideLikeHandler")
+	}
+
+	if o.SlidePutSlideSuperlikeHandler == nil {
+		unregistered = append(unregistered, "slide.PutSlideSuperlikeHandler")
 	}
 
 	if o.UserPutUserIDHandler == nil {
@@ -277,10 +360,35 @@ func (o *TopCrushAPI) initHandlerCache() {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
 
+	if o.handlers["DELETE"] == nil {
+		o.handlers["DELETE"] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/matchs/delete"] = matchs.NewDeleteMatchsDelete(o.context, o.MatchsDeleteMatchsDeleteHandler)
+
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/matches"] = matches.NewGetMatches(o.context, o.MatchesGetMatchesHandler)
+	o.handlers["GET"]["/chat/messages/{id}/{messageIndex}"] = chat.NewGetChatMessagesIDMessageIndex(o.context, o.ChatGetChatMessagesIDMessageIndexHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/matchs/all"] = matchs.NewGetMatchsAll(o.context, o.MatchsGetMatchsAllHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/matchs/likes"] = matchs.NewGetMatchsLikes(o.context, o.MatchsGetMatchsLikesHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/slide/users"] = slide.NewGetSlideUsers(o.context, o.SlideGetSlideUsersHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/user"] = user.NewGetUser(o.context, o.UserGetUserHandler)
 
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
@@ -291,6 +399,26 @@ func (o *TopCrushAPI) initHandlerCache() {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
 	o.handlers["POST"]["/user"] = user.NewPostUser(o.context, o.UserPostUserHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/chat/messages/{id}"] = chat.NewPutChatMessagesID(o.context, o.ChatPutChatMessagesIDHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/slide/boast"] = slide.NewPutSlideBoast(o.context, o.SlidePutSlideBoastHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/slide/like"] = slide.NewPutSlideLike(o.context, o.SlidePutSlideLikeHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers["PUT"] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/slide/superlike"] = slide.NewPutSlideSuperlike(o.context, o.SlidePutSlideSuperlikeHandler)
 
 	if o.handlers["PUT"] == nil {
 		o.handlers["PUT"] = make(map[string]http.Handler)

@@ -25,7 +25,7 @@ type PutUserIDCreated struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.User `json:"body,omitempty"`
+	Payload *models.UserPrivate `json:"body,omitempty"`
 }
 
 // NewPutUserIDCreated creates PutUserIDCreated with default headers values
@@ -35,13 +35,13 @@ func NewPutUserIDCreated() *PutUserIDCreated {
 }
 
 // WithPayload adds the payload to the put user Id created response
-func (o *PutUserIDCreated) WithPayload(payload *models.User) *PutUserIDCreated {
+func (o *PutUserIDCreated) WithPayload(payload *models.UserPrivate) *PutUserIDCreated {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the put user Id created response
-func (o *PutUserIDCreated) SetPayload(payload *models.User) {
+func (o *PutUserIDCreated) SetPayload(payload *models.UserPrivate) {
 	o.Payload = payload
 }
 

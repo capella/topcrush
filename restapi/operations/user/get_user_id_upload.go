@@ -31,7 +31,7 @@ func NewGetUserIDUpload(ctx *middleware.Context, handler GetUserIDUploadHandler)
 
 /*GetUserIDUpload swagger:route GET /user/{id}/upload user getUserIdUpload
 
-GetUserIDUpload get user ID upload API
+get a image upload link
 
 */
 type GetUserIDUpload struct {

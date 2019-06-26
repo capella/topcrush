@@ -33,16 +33,316 @@ func init() {
     "version": "0.1.0"
   },
   "paths": {
-    "/matches": {
-      "get": {
+    "/chat/messages/{id}": {
+      "put": {
+        "description": "send a message in a chat",
         "tags": [
-          "matches"
+          "chat"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "ObjectId",
+            "description": "chat id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
           "201": {
-            "description": "Get a list of matches 15 mathces",
+            "description": "message submited",
             "schema": {
-              "$ref": "#/definitions/user"
+              "type": "string"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/chat/messages/{id}/{messageIndex}": {
+      "get": {
+        "description": "return all message from messageIndex",
+        "tags": [
+          "chat"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "ObjectId",
+            "description": "chat id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "format": "uint64",
+            "description": "this is last retrived message",
+            "name": "messageIndex",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "list of messages",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/message"
+              }
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/matchs/all": {
+      "get": {
+        "description": "return a list of all matchs",
+        "tags": [
+          "matchs"
+        ],
+        "responses": {
+          "201": {
+            "description": "a list of users and chats",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "chatID": {
+                    "type": "string",
+                    "format": "ObjectId"
+                  },
+                  "user": {
+                    "$ref": "#/definitions/userPublic"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/matchs/delete": {
+      "delete": {
+        "description": "umatch user",
+        "tags": [
+          "matchs"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "description": "the id of the other user",
+              "type": "string",
+              "format": "ObjectId",
+              "readOnly": true
+            }
+          }
+        ],
+        "responses": {
+          "201": {},
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/matchs/likes": {
+      "get": {
+        "description": "all persons who like me",
+        "tags": [
+          "matchs"
+        ],
+        "responses": {
+          "201": {
+            "description": "list of users",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/userPublic"
+              }
+            }
+          },
+          "402": {
+            "description": "subscription required",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/slide/boast": {
+      "put": {
+        "description": "make a boast",
+        "tags": [
+          "slide"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "description": "the id of the match",
+              "type": "string",
+              "format": "ObjectId",
+              "readOnly": true
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "boast worked",
+            "schema": {
+              "$ref": "#/definitions/success"
+            }
+          },
+          "402": {
+            "description": "no more boasts",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/slide/like": {
+      "put": {
+        "description": "make a like",
+        "tags": [
+          "slide"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "description": "the id of the match",
+              "type": "string",
+              "format": "ObjectId",
+              "readOnly": true
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "like worked",
+            "schema": {
+              "$ref": "#/definitions/success"
+            }
+          },
+          "402": {
+            "description": "no more likes",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/slide/superlike": {
+      "put": {
+        "description": "make a superlike",
+        "tags": [
+          "slide"
+        ],
+        "parameters": [
+          {
+            "name": "matchID",
+            "in": "body",
+            "schema": {
+              "description": "the id of the match",
+              "type": "string",
+              "format": "ObjectId",
+              "readOnly": true
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "superlike worked",
+            "schema": {
+              "$ref": "#/definitions/success"
+            }
+          },
+          "402": {
+            "description": "no more superlikes avaliable",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/slide/users": {
+      "get": {
+        "description": "return a list of near users",
+        "tags": [
+          "slide"
+        ],
+        "responses": {
+          "201": {
+            "description": "return a list of near users",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/userPublic"
+              }
             }
           },
           "402": {
@@ -61,6 +361,26 @@ func init() {
       }
     },
     "/user": {
+      "get": {
+        "description": "return the user information",
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/userPrivate"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
       "post": {
         "description": "create a new user",
         "tags": [
@@ -71,7 +391,7 @@ func init() {
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/userPrivate"
             }
           }
         ],
@@ -79,7 +399,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/userPrivate"
             }
           },
           "default": {
@@ -109,7 +429,7 @@ func init() {
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/userPrivate"
             }
           }
         ],
@@ -117,7 +437,7 @@ func init() {
           "201": {
             "description": "Uploaded",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/userPrivate"
             }
           },
           "403": {
@@ -159,13 +479,10 @@ func init() {
         ],
         "responses": {
           "201": {
-            "description": "Update",
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
+            "description": "Update"
           },
           "403": {
-            "description": "Forbidde",
+            "description": "Forbidden",
             "schema": {
               "$ref": "#/definitions/error"
             }
@@ -181,6 +498,7 @@ func init() {
     },
     "/user/{id}/upload": {
       "get": {
+        "description": "get a image upload link",
         "tags": [
           "user"
         ],
@@ -211,6 +529,30 @@ func init() {
     }
   },
   "definitions": {
+    "chat": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "format": "ObjectId",
+          "readOnly": true
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/message"
+          }
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "ObjectId",
+            "readOnly": true
+          }
+        }
+      }
+    },
     "error": {
       "type": "object",
       "required": [
@@ -235,11 +577,28 @@ func init() {
         },
         "uploadDate": {
           "type": "string",
-          "format": "date"
+          "format": "date-time"
         },
         "url": {
           "type": "string",
           "format": "url"
+        }
+      }
+    },
+    "message": {
+      "type": "object",
+      "required": [
+        "from",
+        "text"
+      ],
+      "properties": {
+        "from": {
+          "description": "id of the user who write the message",
+          "type": "string",
+          "format": "ObjectId"
+        },
+        "text": {
+          "type": "string"
         }
       }
     },
@@ -268,28 +627,22 @@ func init() {
         }
       }
     },
-    "user": {
-      "type": "object",
+    "success": {
+      "type": "string",
+      "default": "OK"
+    },
+    "userBasic": {
+      "description": "this user information is public",
       "required": [
         "fullName",
         "interestIn",
-        "gender",
-        "birthDate",
-        "radio"
+        "gender"
       ],
       "properties": {
         "_id": {
           "type": "string",
           "format": "ObjectId",
           "readOnly": true
-        },
-        "age": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "birthDate": {
-          "type": "string",
-          "format": "date"
         },
         "company": {
           "type": "string",
@@ -305,6 +658,7 @@ func init() {
           "minLength": 10
         },
         "gender": {
+          "type": "string",
           "enum": [
             "male",
             "female"
@@ -317,6 +671,7 @@ func init() {
           }
         },
         "interestIn": {
+          "type": "string",
           "enum": [
             "male",
             "female"
@@ -326,26 +681,130 @@ func init() {
           "type": "string",
           "maxLength": 256
         },
-        "lastBirthDateChange": {
-          "description": "is the last time the user change it birthDate, user cannot change it a high frequency",
-          "type": "string",
-          "format": "date"
-        },
-        "lastPosition": {
-          "$ref": "#/definitions/position"
-        },
-        "radio": {
-          "description": "distance in km to find matches",
-          "type": "integer",
-          "format": "uint64",
-          "maximum": 30,
-          "minimum": 1
-        },
         "school": {
           "type": "string",
           "maxLength": 256
         }
       }
+    },
+    "userInternal": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/userPrivate"
+        },
+        {
+          "properties": {
+            "likes": {
+              "type": "array",
+              "items": {
+                "description": "match user id",
+                "type": "string",
+                "format": "ObjectId"
+              },
+              "readOnly": true
+            }
+          }
+        }
+      ]
+    },
+    "userPrivate": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/userBasic"
+        },
+        {
+          "properties": {
+            "birthDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "boasts": {
+              "type": "array",
+              "items": {
+                "description": "when the boast finish",
+                "type": "string",
+                "format": "date-time"
+              },
+              "readOnly": true
+            },
+            "lastBirthDateChange": {
+              "description": "is the last time the user change it birthDate, user cannot change it a high frequency",
+              "type": "string",
+              "format": "date",
+              "readOnly": true
+            },
+            "lastPosition": {
+              "$ref": "#/definitions/position"
+            },
+            "matchs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "chatID": {
+                    "description": "chat ID",
+                    "type": "string",
+                    "format": "ObjectId"
+                  },
+                  "userID": {
+                    "description": "match user id",
+                    "type": "string",
+                    "format": "ObjectId"
+                  }
+                }
+              },
+              "readOnly": true
+            },
+            "radio": {
+              "description": "distance in km to find matches",
+              "type": "integer",
+              "format": "uint64",
+              "maximum": 30,
+              "minimum": 1
+            },
+            "remaningBoasts": {
+              "type": "integer",
+              "format": "int64",
+              "readOnly": true
+            },
+            "remaningLikes": {
+              "type": "integer",
+              "format": "int64",
+              "readOnly": true
+            },
+            "remaningSuperlikes": {
+              "type": "integer",
+              "format": "int64",
+              "readOnly": true
+            }
+          }
+        }
+      ]
+    },
+    "userPublic": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/userBasic"
+        },
+        {
+          "properties": {
+            "age": {
+              "type": "integer",
+              "format": "int64",
+              "maximum": 120,
+              "minimum": 18
+            },
+            "distance": {
+              "description": "distance in km",
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      ]
     }
   }
 }`))
@@ -365,16 +824,317 @@ func init() {
     "version": "0.1.0"
   },
   "paths": {
-    "/matches": {
-      "get": {
+    "/chat/messages/{id}": {
+      "put": {
+        "description": "send a message in a chat",
         "tags": [
-          "matches"
+          "chat"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "ObjectId",
+            "description": "chat id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
           "201": {
-            "description": "Get a list of matches 15 mathces",
+            "description": "message submited",
             "schema": {
-              "$ref": "#/definitions/user"
+              "type": "string"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/chat/messages/{id}/{messageIndex}": {
+      "get": {
+        "description": "return all message from messageIndex",
+        "tags": [
+          "chat"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "ObjectId",
+            "description": "chat id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "minimum": 0,
+            "type": "integer",
+            "format": "uint64",
+            "description": "this is last retrived message",
+            "name": "messageIndex",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "list of messages",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/message"
+              }
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/matchs/all": {
+      "get": {
+        "description": "return a list of all matchs",
+        "tags": [
+          "matchs"
+        ],
+        "responses": {
+          "201": {
+            "description": "a list of users and chats",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "chatID": {
+                    "type": "string",
+                    "format": "ObjectId"
+                  },
+                  "user": {
+                    "$ref": "#/definitions/userPublic"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/matchs/delete": {
+      "delete": {
+        "description": "umatch user",
+        "tags": [
+          "matchs"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "description": "the id of the other user",
+              "type": "string",
+              "format": "ObjectId",
+              "readOnly": true
+            }
+          }
+        ],
+        "responses": {
+          "201": {},
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/matchs/likes": {
+      "get": {
+        "description": "all persons who like me",
+        "tags": [
+          "matchs"
+        ],
+        "responses": {
+          "201": {
+            "description": "list of users",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/userPublic"
+              }
+            }
+          },
+          "402": {
+            "description": "subscription required",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/slide/boast": {
+      "put": {
+        "description": "make a boast",
+        "tags": [
+          "slide"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "description": "the id of the match",
+              "type": "string",
+              "format": "ObjectId",
+              "readOnly": true
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "boast worked",
+            "schema": {
+              "$ref": "#/definitions/success"
+            }
+          },
+          "402": {
+            "description": "no more boasts",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/slide/like": {
+      "put": {
+        "description": "make a like",
+        "tags": [
+          "slide"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "description": "the id of the match",
+              "type": "string",
+              "format": "ObjectId",
+              "readOnly": true
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "like worked",
+            "schema": {
+              "$ref": "#/definitions/success"
+            }
+          },
+          "402": {
+            "description": "no more likes",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/slide/superlike": {
+      "put": {
+        "description": "make a superlike",
+        "tags": [
+          "slide"
+        ],
+        "parameters": [
+          {
+            "name": "matchID",
+            "in": "body",
+            "schema": {
+              "description": "the id of the match",
+              "type": "string",
+              "format": "ObjectId",
+              "readOnly": true
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "superlike worked",
+            "schema": {
+              "$ref": "#/definitions/success"
+            }
+          },
+          "402": {
+            "description": "no more superlikes avaliable",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/slide/users": {
+      "get": {
+        "description": "return a list of near users",
+        "tags": [
+          "slide"
+        ],
+        "responses": {
+          "201": {
+            "description": "return a list of near users",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/userPublic"
+              }
             }
           },
           "402": {
@@ -393,6 +1153,26 @@ func init() {
       }
     },
     "/user": {
+      "get": {
+        "description": "return the user information",
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/userPrivate"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
       "post": {
         "description": "create a new user",
         "tags": [
@@ -403,7 +1183,7 @@ func init() {
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/userPrivate"
             }
           }
         ],
@@ -411,7 +1191,7 @@ func init() {
           "201": {
             "description": "Created",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/userPrivate"
             }
           },
           "default": {
@@ -441,7 +1221,7 @@ func init() {
             "name": "body",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/userPrivate"
             }
           }
         ],
@@ -449,7 +1229,7 @@ func init() {
           "201": {
             "description": "Uploaded",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/userPrivate"
             }
           },
           "403": {
@@ -491,13 +1271,10 @@ func init() {
         ],
         "responses": {
           "201": {
-            "description": "Update",
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
+            "description": "Update"
           },
           "403": {
-            "description": "Forbidde",
+            "description": "Forbidden",
             "schema": {
               "$ref": "#/definitions/error"
             }
@@ -513,6 +1290,7 @@ func init() {
     },
     "/user/{id}/upload": {
       "get": {
+        "description": "get a image upload link",
         "tags": [
           "user"
         ],
@@ -543,6 +1321,30 @@ func init() {
     }
   },
   "definitions": {
+    "chat": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "format": "ObjectId",
+          "readOnly": true
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/message"
+          }
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "ObjectId",
+            "readOnly": true
+          }
+        }
+      }
+    },
     "error": {
       "type": "object",
       "required": [
@@ -567,11 +1369,28 @@ func init() {
         },
         "uploadDate": {
           "type": "string",
-          "format": "date"
+          "format": "date-time"
         },
         "url": {
           "type": "string",
           "format": "url"
+        }
+      }
+    },
+    "message": {
+      "type": "object",
+      "required": [
+        "from",
+        "text"
+      ],
+      "properties": {
+        "from": {
+          "description": "id of the user who write the message",
+          "type": "string",
+          "format": "ObjectId"
+        },
+        "text": {
+          "type": "string"
         }
       }
     },
@@ -600,28 +1419,22 @@ func init() {
         }
       }
     },
-    "user": {
-      "type": "object",
+    "success": {
+      "type": "string",
+      "default": "OK"
+    },
+    "userBasic": {
+      "description": "this user information is public",
       "required": [
         "fullName",
         "interestIn",
-        "gender",
-        "birthDate",
-        "radio"
+        "gender"
       ],
       "properties": {
         "_id": {
           "type": "string",
           "format": "ObjectId",
           "readOnly": true
-        },
-        "age": {
-          "type": "integer",
-          "format": "int64"
-        },
-        "birthDate": {
-          "type": "string",
-          "format": "date"
         },
         "company": {
           "type": "string",
@@ -637,6 +1450,7 @@ func init() {
           "minLength": 10
         },
         "gender": {
+          "type": "string",
           "enum": [
             "male",
             "female"
@@ -649,6 +1463,7 @@ func init() {
           }
         },
         "interestIn": {
+          "type": "string",
           "enum": [
             "male",
             "female"
@@ -658,26 +1473,130 @@ func init() {
           "type": "string",
           "maxLength": 256
         },
-        "lastBirthDateChange": {
-          "description": "is the last time the user change it birthDate, user cannot change it a high frequency",
-          "type": "string",
-          "format": "date"
-        },
-        "lastPosition": {
-          "$ref": "#/definitions/position"
-        },
-        "radio": {
-          "description": "distance in km to find matches",
-          "type": "integer",
-          "format": "uint64",
-          "maximum": 30,
-          "minimum": 1
-        },
         "school": {
           "type": "string",
           "maxLength": 256
         }
       }
+    },
+    "userInternal": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/userPrivate"
+        },
+        {
+          "properties": {
+            "likes": {
+              "type": "array",
+              "items": {
+                "description": "match user id",
+                "type": "string",
+                "format": "ObjectId"
+              },
+              "readOnly": true
+            }
+          }
+        }
+      ]
+    },
+    "userPrivate": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/userBasic"
+        },
+        {
+          "properties": {
+            "birthDate": {
+              "type": "string",
+              "format": "date"
+            },
+            "boasts": {
+              "type": "array",
+              "items": {
+                "description": "when the boast finish",
+                "type": "string",
+                "format": "date-time"
+              },
+              "readOnly": true
+            },
+            "lastBirthDateChange": {
+              "description": "is the last time the user change it birthDate, user cannot change it a high frequency",
+              "type": "string",
+              "format": "date",
+              "readOnly": true
+            },
+            "lastPosition": {
+              "$ref": "#/definitions/position"
+            },
+            "matchs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "chatID": {
+                    "description": "chat ID",
+                    "type": "string",
+                    "format": "ObjectId"
+                  },
+                  "userID": {
+                    "description": "match user id",
+                    "type": "string",
+                    "format": "ObjectId"
+                  }
+                }
+              },
+              "readOnly": true
+            },
+            "radio": {
+              "description": "distance in km to find matches",
+              "type": "integer",
+              "format": "uint64",
+              "maximum": 30,
+              "minimum": 1
+            },
+            "remaningBoasts": {
+              "type": "integer",
+              "format": "int64",
+              "readOnly": true
+            },
+            "remaningLikes": {
+              "type": "integer",
+              "format": "int64",
+              "readOnly": true
+            },
+            "remaningSuperlikes": {
+              "type": "integer",
+              "format": "int64",
+              "readOnly": true
+            }
+          }
+        }
+      ]
+    },
+    "userPublic": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/userBasic"
+        },
+        {
+          "properties": {
+            "age": {
+              "type": "integer",
+              "format": "int64",
+              "maximum": 120,
+              "minimum": 18
+            },
+            "distance": {
+              "description": "distance in km",
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        }
+      ]
     }
   }
 }`))

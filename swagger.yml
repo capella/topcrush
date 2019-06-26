@@ -11,6 +11,7 @@ swagger: "2.0"
 paths: 
   /user/{id}/upload:
     get:
+      description: get a image upload link
       parameters:
         - type: integer
           format: ObjectId
@@ -35,14 +36,27 @@ paths:
         - name: body
           in: body
           schema:
-            $ref: "#/definitions/user"
+            $ref: "#/definitions/userPrivate"
       tags:
         - user
       responses:
         201:
           description: Created
           schema:
-            $ref: "#/definitions/user"
+            $ref: "#/definitions/userPrivate"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+    get:
+      description: return the user information
+      tags:
+        - user
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: "#/definitions/userPrivate"
         default:
           description: generic error response
           schema:
@@ -59,14 +73,14 @@ paths:
         - name: body
           in: body
           schema:
-            $ref: "#/definitions/user"
+            $ref: "#/definitions/userPrivate"
       tags:
         - user
       responses:
         201:
           description: Uploaded
           schema:
-            $ref: "#/definitions/user"
+            $ref: "#/definitions/userPrivate"
         default:
           description: Generic error
           schema:
@@ -94,33 +108,229 @@ paths:
       responses:
         201:
           description: Update
-          schema:
-            $ref: "#/definitions/user"
         default:
           description: generic error response
           schema:
             $ref: "#/definitions/error"
         403:
-          description: Forbidde
+          description: Forbidden
           schema:
             $ref: "#/definitions/error"
 
-  /matches:
+  /slide/users:
     get:
+      description: return a list of near users
       tags:
-        - matches
+        - slide
       responses:
         201:
-          description: Get a list of matches 15 mathces
+          description: return a list of near users
           schema:
-
-            $ref: "#/definitions/user"
+            type: array
+            items:
+              $ref: "#/definitions/userPublic"
+        402:
+          description: subscription requerid
+          schema:
+            $ref: "#/definitions/error"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+  /slide/like:
+    put:
+      description: make a like
+      tags:
+        - slide
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: string
+            format: ObjectId
+            readOnly: true
+            description: the id of the match
+      responses:
+        201:
+          description: like worked
+          schema:
+            $ref: "#/definitions/success"
         default:
           description: generic error response
           schema:
             $ref: "#/definitions/error"
         402:
-          description: subscription requerid
+          description: no more likes
+          schema:
+            $ref: "#/definitions/error"
+  /slide/superlike:
+    put:
+      description: make a superlike
+      tags:
+        - slide
+      parameters:
+        - name: matchID
+          in: body
+          schema:
+            type: string
+            format: ObjectId
+            readOnly: true
+            description: the id of the match
+      responses:
+        201:
+          description: superlike worked
+          schema:
+            $ref: "#/definitions/success"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+        402:
+          description: no more superlikes avaliable
+          schema:
+            $ref: "#/definitions/error"
+  /slide/boast:
+    put:
+      description: make a boast
+      tags:
+        - slide
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: string
+            format: ObjectId
+            readOnly: true
+            description: the id of the match
+      responses:
+        201:
+          description: boast worked
+          schema:
+            $ref: "#/definitions/success"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+        402:
+          description: no more boasts
+          schema:
+            $ref: "#/definitions/error"
+
+  /matchs/all:
+    get:
+      description: return a list of all matchs
+      tags:
+        - matchs
+      responses:
+        201:
+          description: a list of users and chats
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                chatID:
+                  type: string
+                  format: ObjectId
+                user:
+                  $ref: "#/definitions/userPublic"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+  /matchs/likes:
+    get:
+      description: all persons who like me
+      tags:
+        - matchs
+      responses:
+        201:
+          description: list of users
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/userPublic"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+        402:
+          description: subscription required
+          schema:
+            $ref: "#/definitions/error"
+  /matchs/delete:
+    delete:
+      description: umatch user
+      tags:
+        - matchs
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: string
+            format: ObjectId
+            readOnly: true
+            description: the id of the other user
+      responses:
+        201:
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+
+  /chat/messages/{id}/{messageIndex}:
+    get:
+      tags:
+        - chat
+      description: return all message from messageIndex
+      parameters:
+        - type: integer
+          format: ObjectId
+          name: id
+          in: path
+          required: true
+          description: chat id
+        - type: integer
+          format: uint64
+          name: messageIndex
+          in: path
+          required: true
+          description: this is last retrived message
+          minimum: 0
+      responses:
+        200:
+          description: list of messages
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/message"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+  /chat/messages/{id}:
+    put:
+      description: send a message in a chat
+      tags:
+        - chat
+      parameters:
+        - type: integer
+          format: ObjectId
+          name: id
+          in: path
+          required: true
+          description: chat id
+        - name: body
+          in: body
+          schema:
+            type: string
+      responses:
+        201:
+          description: message submited
+          schema:
+            type: string
+        default:
+          description: generic error response
           schema:
             $ref: "#/definitions/error"
 
@@ -154,9 +364,9 @@ definitions:
         format: url
       uploadDate:
         type: string
-        format: date
-  user:
-    type: object
+        format: date-time
+  userBasic:
+    description: this user information is public
     properties:
       _id:
         type: string
@@ -165,14 +375,13 @@ definitions:
       description:
         type: string
         maxLength: 4096
-      age:
-        type: integer
-        format: int64
       gender:
+        type: string
         enum:
         - male
         - female
       interestIn:
+        type: string
         enum:
         - male
         - female
@@ -189,31 +398,95 @@ definitions:
         type: array
         items:
            $ref: "#/definitions/images"
-      birthDate:
-        type: string
-        format: date
-      lastBirthDateChange:
-        type: string
-        format: date
-        description: is the last time the user change it birthDate, user cannot change it a high frequency
       fullName:
         type: string
         maxLength: 256
         minLength: 10
-      lastPosition:
-        $ref: "#/definitions/position"
-      radio:
-        description: distance in km to find matches
-        type: integer
-        format: uint64
-        maximum: 30
-        minimum: 1
     required:
       - fullName
       - interestIn
       - gender
-      - birthDate
-      - radio
+  userPrivate:
+    type: object
+    allOf:
+    - $ref: '#/definitions/userBasic'
+    - properties:
+        birthDate:
+          type: string
+          format: date
+        lastBirthDateChange:
+          type: string
+          format: date
+          description: is the last time the user change it birthDate, user cannot change it a high frequency
+          readOnly: true
+        lastPosition:
+          $ref: "#/definitions/position"
+        radio:
+          description: distance in km to find matches
+          type: integer
+          format: uint64
+          maximum: 30
+          minimum: 1
+        remaningLikes:
+          type: integer
+          format: int64
+          readOnly: true
+        remaningSuperlikes:
+          type: integer
+          format: int64
+          readOnly: true
+        remaningBoasts:
+          type: integer
+          format: int64
+          readOnly: true
+        boasts:
+          readOnly: true
+          type: array
+          items:
+            type: string
+            format: date-time
+            description: when the boast finish
+        matchs:
+          readOnly: true
+          type: array
+          items:
+            type: object
+            properties:
+              userID:
+                type: string
+                format: ObjectId
+                description: match user id
+              chatID:
+                type: string
+                format: ObjectId
+                description: chat ID
+  userPublic:
+    type: object
+    allOf:
+    - $ref: '#/definitions/userBasic'
+    - properties:
+        age:
+          type: integer
+          format: int64
+          maximum: 120
+          minimum: 18
+        distance:
+          type: integer
+          format: int64
+          description: distance in km
+
+  userInternal:
+    type: object
+    allOf:
+    - $ref: '#/definitions/userPrivate'
+    - properties:
+        likes:
+          readOnly: true
+          type: array
+          items:
+            type: string
+            format: ObjectId
+            description: match user id
   error:
     type: object
     required:
@@ -224,3 +497,35 @@ definitions:
         format: int64
       message:
         type: string
+  success:
+    type: string
+    default: "OK"
+  message:
+    type: object
+    required:
+      - from
+      - text
+    properties:
+      from:
+        description: id of the user who write the message
+        type: string
+        format: ObjectId
+      text:
+        type: string
+  chat:
+    type: object
+    properties:
+      _id:
+        type: string
+        format: ObjectId
+        readOnly: true
+      messages:
+        type: array
+        items:
+          $ref: "#/definitions/message"
+      users:
+        type: array
+        items:
+          type: string
+          format: ObjectId
+          readOnly: true

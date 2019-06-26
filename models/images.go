@@ -23,8 +23,8 @@ type Images struct {
 	ID strfmt.ObjectId `json:"_id,omitempty"`
 
 	// upload date
-	// Format: date
-	UploadDate strfmt.Date `json:"uploadDate,omitempty"`
+	// Format: date-time
+	UploadDate strfmt.DateTime `json:"uploadDate,omitempty"`
 
 	// url
 	URL string `json:"url,omitempty"`
@@ -67,7 +67,7 @@ func (m *Images) validateUploadDate(formats strfmt.Registry) error {
 		return nil
 	}
 
-	if err := validate.FormatOf("uploadDate", "body", "date", m.UploadDate.String(), formats); err != nil {
+	if err := validate.FormatOf("uploadDate", "body", "date-time", m.UploadDate.String(), formats); err != nil {
 		return err
 	}
 

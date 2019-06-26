@@ -11,7 +11,9 @@ import (
 	middleware "github.com/go-openapi/runtime/middleware"
 
 	"github.com/capella/topcrush/restapi/operations"
-	"github.com/capella/topcrush/restapi/operations/matches"
+	"github.com/capella/topcrush/restapi/operations/chat"
+	"github.com/capella/topcrush/restapi/operations/matchs"
+	"github.com/capella/topcrush/restapi/operations/slide"
 	"github.com/capella/topcrush/restapi/operations/user"
 )
 
@@ -35,9 +37,34 @@ func configureAPI(api *operations.TopCrushAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	if api.MatchesGetMatchesHandler == nil {
-		api.MatchesGetMatchesHandler = matches.GetMatchesHandlerFunc(func(params matches.GetMatchesParams) middleware.Responder {
-			return middleware.NotImplemented("operation matches.GetMatches has not yet been implemented")
+	if api.MatchsDeleteMatchsDeleteHandler == nil {
+		api.MatchsDeleteMatchsDeleteHandler = matchs.DeleteMatchsDeleteHandlerFunc(func(params matchs.DeleteMatchsDeleteParams) middleware.Responder {
+			return middleware.NotImplemented("operation matchs.DeleteMatchsDelete has not yet been implemented")
+		})
+	}
+	if api.ChatGetChatMessagesIDMessageIndexHandler == nil {
+		api.ChatGetChatMessagesIDMessageIndexHandler = chat.GetChatMessagesIDMessageIndexHandlerFunc(func(params chat.GetChatMessagesIDMessageIndexParams) middleware.Responder {
+			return middleware.NotImplemented("operation chat.GetChatMessagesIDMessageIndex has not yet been implemented")
+		})
+	}
+	if api.MatchsGetMatchsAllHandler == nil {
+		api.MatchsGetMatchsAllHandler = matchs.GetMatchsAllHandlerFunc(func(params matchs.GetMatchsAllParams) middleware.Responder {
+			return middleware.NotImplemented("operation matchs.GetMatchsAll has not yet been implemented")
+		})
+	}
+	if api.MatchsGetMatchsLikesHandler == nil {
+		api.MatchsGetMatchsLikesHandler = matchs.GetMatchsLikesHandlerFunc(func(params matchs.GetMatchsLikesParams) middleware.Responder {
+			return middleware.NotImplemented("operation matchs.GetMatchsLikes has not yet been implemented")
+		})
+	}
+	if api.SlideGetSlideUsersHandler == nil {
+		api.SlideGetSlideUsersHandler = slide.GetSlideUsersHandlerFunc(func(params slide.GetSlideUsersParams) middleware.Responder {
+			return middleware.NotImplemented("operation slide.GetSlideUsers has not yet been implemented")
+		})
+	}
+	if api.UserGetUserHandler == nil {
+		api.UserGetUserHandler = user.GetUserHandlerFunc(func(params user.GetUserParams) middleware.Responder {
+			return middleware.NotImplemented("operation user.GetUser has not yet been implemented")
 		})
 	}
 	if api.UserGetUserIDUploadHandler == nil {
@@ -48,6 +75,26 @@ func configureAPI(api *operations.TopCrushAPI) http.Handler {
 	if api.UserPostUserHandler == nil {
 		api.UserPostUserHandler = user.PostUserHandlerFunc(func(params user.PostUserParams) middleware.Responder {
 			return middleware.NotImplemented("operation user.PostUser has not yet been implemented")
+		})
+	}
+	if api.ChatPutChatMessagesIDHandler == nil {
+		api.ChatPutChatMessagesIDHandler = chat.PutChatMessagesIDHandlerFunc(func(params chat.PutChatMessagesIDParams) middleware.Responder {
+			return middleware.NotImplemented("operation chat.PutChatMessagesID has not yet been implemented")
+		})
+	}
+	if api.SlidePutSlideBoastHandler == nil {
+		api.SlidePutSlideBoastHandler = slide.PutSlideBoastHandlerFunc(func(params slide.PutSlideBoastParams) middleware.Responder {
+			return middleware.NotImplemented("operation slide.PutSlideBoast has not yet been implemented")
+		})
+	}
+	if api.SlidePutSlideLikeHandler == nil {
+		api.SlidePutSlideLikeHandler = slide.PutSlideLikeHandlerFunc(func(params slide.PutSlideLikeParams) middleware.Responder {
+			return middleware.NotImplemented("operation slide.PutSlideLike has not yet been implemented")
+		})
+	}
+	if api.SlidePutSlideSuperlikeHandler == nil {
+		api.SlidePutSlideSuperlikeHandler = slide.PutSlideSuperlikeHandlerFunc(func(params slide.PutSlideSuperlikeParams) middleware.Responder {
+			return middleware.NotImplemented("operation slide.PutSlideSuperlike has not yet been implemented")
 		})
 	}
 	if api.UserPutUserIDHandler == nil {

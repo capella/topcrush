@@ -25,7 +25,7 @@ type PostUserCreated struct {
 	/*
 	  In: Body
 	*/
-	Payload *models.User `json:"body,omitempty"`
+	Payload *models.UserPrivate `json:"body,omitempty"`
 }
 
 // NewPostUserCreated creates PostUserCreated with default headers values
@@ -35,13 +35,13 @@ func NewPostUserCreated() *PostUserCreated {
 }
 
 // WithPayload adds the payload to the post user created response
-func (o *PostUserCreated) WithPayload(payload *models.User) *PostUserCreated {
+func (o *PostUserCreated) WithPayload(payload *models.UserPrivate) *PostUserCreated {
 	o.Payload = payload
 	return o
 }
 
 // SetPayload sets the payload to the post user created response
-func (o *PostUserCreated) SetPayload(payload *models.User) {
+func (o *PostUserCreated) SetPayload(payload *models.UserPrivate) {
 	o.Payload = payload
 }
 
