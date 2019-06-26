@@ -23,6 +23,8 @@ import (
 	"github.com/capella/topcrush/restapi/operations/matchs"
 	"github.com/capella/topcrush/restapi/operations/slide"
 	"github.com/capella/topcrush/restapi/operations/user"
+
+	models "github.com/capella/topcrush/models"
 )
 
 // NewTopCrushAPI creates a new TopCrush instance
@@ -42,48 +44,56 @@ func NewTopCrushAPI(spec *loads.Document) *TopCrushAPI {
 		BearerAuthenticator: security.BearerAuth,
 		JSONConsumer:        runtime.JSONConsumer(),
 		JSONProducer:        runtime.JSONProducer(),
-		MatchsDeleteMatchsDeleteHandler: matchs.DeleteMatchsDeleteHandlerFunc(func(params matchs.DeleteMatchsDeleteParams) middleware.Responder {
+		MatchsDeleteMatchsDeleteHandler: matchs.DeleteMatchsDeleteHandlerFunc(func(params matchs.DeleteMatchsDeleteParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation MatchsDeleteMatchsDelete has not yet been implemented")
 		}),
-		ChatGetChatMessagesIDMessageIndexHandler: chat.GetChatMessagesIDMessageIndexHandlerFunc(func(params chat.GetChatMessagesIDMessageIndexParams) middleware.Responder {
+		ChatGetChatMessagesIDMessageIndexHandler: chat.GetChatMessagesIDMessageIndexHandlerFunc(func(params chat.GetChatMessagesIDMessageIndexParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation ChatGetChatMessagesIDMessageIndex has not yet been implemented")
 		}),
-		MatchsGetMatchsAllHandler: matchs.GetMatchsAllHandlerFunc(func(params matchs.GetMatchsAllParams) middleware.Responder {
+		MatchsGetMatchsAllHandler: matchs.GetMatchsAllHandlerFunc(func(params matchs.GetMatchsAllParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation MatchsGetMatchsAll has not yet been implemented")
 		}),
-		MatchsGetMatchsLikesHandler: matchs.GetMatchsLikesHandlerFunc(func(params matchs.GetMatchsLikesParams) middleware.Responder {
+		MatchsGetMatchsLikesHandler: matchs.GetMatchsLikesHandlerFunc(func(params matchs.GetMatchsLikesParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation MatchsGetMatchsLikes has not yet been implemented")
 		}),
-		SlideGetSlideUsersHandler: slide.GetSlideUsersHandlerFunc(func(params slide.GetSlideUsersParams) middleware.Responder {
+		SlideGetSlideUsersHandler: slide.GetSlideUsersHandlerFunc(func(params slide.GetSlideUsersParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation SlideGetSlideUsers has not yet been implemented")
 		}),
-		UserGetUserHandler: user.GetUserHandlerFunc(func(params user.GetUserParams) middleware.Responder {
+		UserGetUserHandler: user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation UserGetUser has not yet been implemented")
 		}),
-		UserGetUserIDUploadHandler: user.GetUserIDUploadHandlerFunc(func(params user.GetUserIDUploadParams) middleware.Responder {
+		UserGetUserIDUploadHandler: user.GetUserIDUploadHandlerFunc(func(params user.GetUserIDUploadParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation UserGetUserIDUpload has not yet been implemented")
 		}),
-		UserPostUserHandler: user.PostUserHandlerFunc(func(params user.PostUserParams) middleware.Responder {
+		UserPostUserHandler: user.PostUserHandlerFunc(func(params user.PostUserParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation UserPostUser has not yet been implemented")
 		}),
-		ChatPutChatMessagesIDHandler: chat.PutChatMessagesIDHandlerFunc(func(params chat.PutChatMessagesIDParams) middleware.Responder {
+		ChatPutChatMessagesIDHandler: chat.PutChatMessagesIDHandlerFunc(func(params chat.PutChatMessagesIDParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation ChatPutChatMessagesID has not yet been implemented")
 		}),
-		SlidePutSlideBoastHandler: slide.PutSlideBoastHandlerFunc(func(params slide.PutSlideBoastParams) middleware.Responder {
+		SlidePutSlideBoastHandler: slide.PutSlideBoastHandlerFunc(func(params slide.PutSlideBoastParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation SlidePutSlideBoast has not yet been implemented")
 		}),
-		SlidePutSlideLikeHandler: slide.PutSlideLikeHandlerFunc(func(params slide.PutSlideLikeParams) middleware.Responder {
+		SlidePutSlideLikeHandler: slide.PutSlideLikeHandlerFunc(func(params slide.PutSlideLikeParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation SlidePutSlideLike has not yet been implemented")
 		}),
-		SlidePutSlideSuperlikeHandler: slide.PutSlideSuperlikeHandlerFunc(func(params slide.PutSlideSuperlikeParams) middleware.Responder {
+		SlidePutSlideSuperlikeHandler: slide.PutSlideSuperlikeHandlerFunc(func(params slide.PutSlideSuperlikeParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation SlidePutSlideSuperlike has not yet been implemented")
 		}),
-		UserPutUserIDHandler: user.PutUserIDHandlerFunc(func(params user.PutUserIDParams) middleware.Responder {
+		UserPutUserIDHandler: user.PutUserIDHandlerFunc(func(params user.PutUserIDParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation UserPutUserID has not yet been implemented")
 		}),
-		UserPutUserIDLocationHandler: user.PutUserIDLocationHandlerFunc(func(params user.PutUserIDLocationParams) middleware.Responder {
+		UserPutUserIDLocationHandler: user.PutUserIDLocationHandlerFunc(func(params user.PutUserIDLocationParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation UserPutUserIDLocation has not yet been implemented")
 		}),
+
+		// Applies when the "Token" header is set
+		APIKeyAuthAuth: func(token string) (*models.Principal, error) {
+			return nil, errors.NotImplemented("api key auth (ApiKeyAuth) Token from header param [Token] has not yet been implemented")
+		},
+
+		// default authorizer is authorized meaning no requests are blocked
+		APIAuthorizer: security.Authorized(),
 	}
 }
 
@@ -114,6 +124,13 @@ type TopCrushAPI struct {
 
 	// JSONProducer registers a producer for a "application/json" mime type
 	JSONProducer runtime.Producer
+
+	// APIKeyAuthAuth registers a function that takes a token and returns a principal
+	// it performs authentication based on an api key Token provided in the header
+	APIKeyAuthAuth func(string) (*models.Principal, error)
+
+	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
+	APIAuthorizer runtime.Authorizer
 
 	// MatchsDeleteMatchsDeleteHandler sets the operation handler for the delete matchs delete operation
 	MatchsDeleteMatchsDeleteHandler matchs.DeleteMatchsDeleteHandler
@@ -206,6 +223,10 @@ func (o *TopCrushAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
+	if o.APIKeyAuthAuth == nil {
+		unregistered = append(unregistered, "TokenAuth")
+	}
+
 	if o.MatchsDeleteMatchsDeleteHandler == nil {
 		unregistered = append(unregistered, "matchs.DeleteMatchsDeleteHandler")
 	}
@@ -277,14 +298,26 @@ func (o *TopCrushAPI) ServeErrorFor(operationID string) func(http.ResponseWriter
 // AuthenticatorsFor gets the authenticators for the specified security schemes
 func (o *TopCrushAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]runtime.Authenticator {
 
-	return nil
+	result := make(map[string]runtime.Authenticator)
+	for name, scheme := range schemes {
+		switch name {
+
+		case "ApiKeyAuth":
+
+			result[name] = o.APIKeyAuthenticator(scheme.Name, scheme.In, func(token string) (interface{}, error) {
+				return o.APIKeyAuthAuth(token)
+			})
+
+		}
+	}
+	return result
 
 }
 
 // Authorizer returns the registered authorizer
 func (o *TopCrushAPI) Authorizer() runtime.Authorizer {
 
-	return nil
+	return o.APIAuthorizer
 
 }
 

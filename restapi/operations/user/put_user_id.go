@@ -9,19 +9,21 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
+
+	models "github.com/capella/topcrush/models"
 )
 
 // PutUserIDHandlerFunc turns a function with the right signature into a put user ID handler
-type PutUserIDHandlerFunc func(PutUserIDParams) middleware.Responder
+type PutUserIDHandlerFunc func(PutUserIDParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn PutUserIDHandlerFunc) Handle(params PutUserIDParams) middleware.Responder {
-	return fn(params)
+func (fn PutUserIDHandlerFunc) Handle(params PutUserIDParams, principal *models.Principal) middleware.Responder {
+	return fn(params, principal)
 }
 
 // PutUserIDHandler interface for that can handle valid put user ID params
 type PutUserIDHandler interface {
-	Handle(PutUserIDParams) middleware.Responder
+	Handle(PutUserIDParams, *models.Principal) middleware.Responder
 }
 
 // NewPutUserID creates a new http.Handler for the put user ID operation
@@ -46,12 +48,25 @@ func (o *PutUserID) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 	var Params = NewPutUserIDParams()
 
+	uprinc, aCtx, err := o.Context.Authorize(r, route)
+	if err != nil {
+		o.Context.Respond(rw, r, route.Produces, route, err)
+		return
+	}
+	if aCtx != nil {
+		r = aCtx
+	}
+	var principal *models.Principal
+	if uprinc != nil {
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
+	}
+
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params) // actually handle the request
+	res := o.Handler.Handle(Params, principal) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 

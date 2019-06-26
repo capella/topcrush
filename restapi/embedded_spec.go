@@ -627,6 +627,25 @@ func init() {
         }
       }
     },
+    "principal": {
+      "description": "save user session information",
+      "type": "object",
+      "properties": {
+        "authMode": {
+          "type": "string",
+          "enum": [
+            "AccountKit",
+            "Facebook"
+          ]
+        },
+        "facebookID": {
+          "type": "string"
+        },
+        "facebookToken": {
+          "type": "string"
+        }
+      }
+    },
     "success": {
       "type": "string",
       "default": "OK"
@@ -695,7 +714,28 @@ func init() {
         },
         {
           "properties": {
+            "deslikes": {
+              "type": "array",
+              "items": {
+                "description": "match user id",
+                "type": "string",
+                "format": "ObjectId"
+              },
+              "readOnly": true
+            },
+            "facebookID": {
+              "type": "string"
+            },
             "likes": {
+              "type": "array",
+              "items": {
+                "description": "match user id",
+                "type": "string",
+                "format": "ObjectId"
+              },
+              "readOnly": true
+            },
+            "superlikes": {
               "type": "array",
               "items": {
                 "description": "match user id",
@@ -806,7 +846,20 @@ func init() {
         }
       ]
     }
-  }
+  },
+  "securityDefinitions": {
+    "ApiKeyAuth": {
+      "description": "should return ` + "`" + `AuthMode Token` + "`" + `",
+      "type": "apiKey",
+      "name": "Token",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": null
+    }
+  ]
 }`))
 	FlatSwaggerJSON = json.RawMessage([]byte(`{
   "consumes": [
@@ -1419,6 +1472,25 @@ func init() {
         }
       }
     },
+    "principal": {
+      "description": "save user session information",
+      "type": "object",
+      "properties": {
+        "authMode": {
+          "type": "string",
+          "enum": [
+            "AccountKit",
+            "Facebook"
+          ]
+        },
+        "facebookID": {
+          "type": "string"
+        },
+        "facebookToken": {
+          "type": "string"
+        }
+      }
+    },
     "success": {
       "type": "string",
       "default": "OK"
@@ -1487,7 +1559,28 @@ func init() {
         },
         {
           "properties": {
+            "deslikes": {
+              "type": "array",
+              "items": {
+                "description": "match user id",
+                "type": "string",
+                "format": "ObjectId"
+              },
+              "readOnly": true
+            },
+            "facebookID": {
+              "type": "string"
+            },
             "likes": {
+              "type": "array",
+              "items": {
+                "description": "match user id",
+                "type": "string",
+                "format": "ObjectId"
+              },
+              "readOnly": true
+            },
+            "superlikes": {
               "type": "array",
               "items": {
                 "description": "match user id",
@@ -1598,6 +1691,19 @@ func init() {
         }
       ]
     }
-  }
+  },
+  "securityDefinitions": {
+    "ApiKeyAuth": {
+      "description": "should return ` + "`" + `AuthMode Token` + "`" + `",
+      "type": "apiKey",
+      "name": "Token",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ]
 }`))
 }

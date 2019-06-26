@@ -20,9 +20,20 @@ import (
 type UserInternal struct {
 	UserPrivate
 
+	// deslikes
+	// Read Only: true
+	Deslikes []strfmt.ObjectId `json:"deslikes"`
+
+	// facebook ID
+	FacebookID string `json:"facebookID,omitempty"`
+
 	// likes
 	// Read Only: true
 	Likes []strfmt.ObjectId `json:"likes"`
+
+	// superlikes
+	// Read Only: true
+	Superlikes []strfmt.ObjectId `json:"superlikes"`
 }
 
 // UnmarshalJSON unmarshals this object from a JSON structure
@@ -36,13 +47,25 @@ func (m *UserInternal) UnmarshalJSON(raw []byte) error {
 
 	// AO1
 	var dataAO1 struct {
+		Deslikes []strfmt.ObjectId `json:"deslikes"`
+
+		FacebookID string `json:"facebookID,omitempty"`
+
 		Likes []strfmt.ObjectId `json:"likes"`
+
+		Superlikes []strfmt.ObjectId `json:"superlikes"`
 	}
 	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
 		return err
 	}
 
+	m.Deslikes = dataAO1.Deslikes
+
+	m.FacebookID = dataAO1.FacebookID
+
 	m.Likes = dataAO1.Likes
+
+	m.Superlikes = dataAO1.Superlikes
 
 	return nil
 }
@@ -58,10 +81,22 @@ func (m UserInternal) MarshalJSON() ([]byte, error) {
 	_parts = append(_parts, aO0)
 
 	var dataAO1 struct {
+		Deslikes []strfmt.ObjectId `json:"deslikes"`
+
+		FacebookID string `json:"facebookID,omitempty"`
+
 		Likes []strfmt.ObjectId `json:"likes"`
+
+		Superlikes []strfmt.ObjectId `json:"superlikes"`
 	}
 
+	dataAO1.Deslikes = m.Deslikes
+
+	dataAO1.FacebookID = m.FacebookID
+
 	dataAO1.Likes = m.Likes
+
+	dataAO1.Superlikes = m.Superlikes
 
 	jsonDataAO1, errAO1 := swag.WriteJSON(dataAO1)
 	if errAO1 != nil {
@@ -81,13 +116,38 @@ func (m *UserInternal) Validate(formats strfmt.Registry) error {
 		res = append(res, err)
 	}
 
+	if err := m.validateDeslikes(formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.validateLikes(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateSuperlikes(formats); err != nil {
 		res = append(res, err)
 	}
 
 	if len(res) > 0 {
 		return errors.CompositeValidationError(res...)
 	}
+	return nil
+}
+
+func (m *UserInternal) validateDeslikes(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Deslikes) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Deslikes); i++ {
+
+		if err := validate.FormatOf("deslikes"+"."+strconv.Itoa(i), "body", "ObjectId", m.Deslikes[i].String(), formats); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -100,6 +160,23 @@ func (m *UserInternal) validateLikes(formats strfmt.Registry) error {
 	for i := 0; i < len(m.Likes); i++ {
 
 		if err := validate.FormatOf("likes"+"."+strconv.Itoa(i), "body", "ObjectId", m.Likes[i].String(), formats); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+func (m *UserInternal) validateSuperlikes(formats strfmt.Registry) error {
+
+	if swag.IsZero(m.Superlikes) { // not required
+		return nil
+	}
+
+	for i := 0; i < len(m.Superlikes); i++ {
+
+		if err := validate.FormatOf("superlikes"+"."+strconv.Itoa(i), "body", "ObjectId", m.Superlikes[i].String(), formats); err != nil {
 			return err
 		}
 

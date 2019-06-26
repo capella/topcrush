@@ -8,6 +8,16 @@ produces:
 schemes:
 - http
 swagger: "2.0"
+
+securityDefinitions:
+    ApiKeyAuth:        # arbitrary name for the security scheme
+      type: apiKey
+      in: header       # can be "header", "query" or "cookie"
+      name: Token  # name of the header, query parameter or cookie
+      description: should return `AuthMode Token`
+security:
+  - ApiKeyAuth: []
+
 paths: 
   /user/{id}/upload:
     get:
@@ -487,6 +497,24 @@ definitions:
             type: string
             format: ObjectId
             description: match user id
+        deslikes:
+          readOnly: true
+          type: array
+          items:
+            type: string
+            format: ObjectId
+            description: match user id
+        superlikes:
+          readOnly: true
+          type: array
+          items:
+            type: string
+            format: ObjectId
+            description: match user id
+        facebookID:
+          type: string
+
+  error:
   error:
     type: object
     required:
@@ -528,4 +556,18 @@ definitions:
         items:
           type: string
           format: ObjectId
-          readOnly: true
+          readOnly: true   
+  principal:
+    description: save user session information
+    type: object
+    properties:
+      facebookToken:
+        type: string
+      facebookID:
+        type: string
+      authMode:
+        type: string
+        enum:
+        - AccountKit
+        - Facebook
+

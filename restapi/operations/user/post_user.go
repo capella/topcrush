@@ -9,19 +9,21 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
+
+	models "github.com/capella/topcrush/models"
 )
 
 // PostUserHandlerFunc turns a function with the right signature into a post user handler
-type PostUserHandlerFunc func(PostUserParams) middleware.Responder
+type PostUserHandlerFunc func(PostUserParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn PostUserHandlerFunc) Handle(params PostUserParams) middleware.Responder {
-	return fn(params)
+func (fn PostUserHandlerFunc) Handle(params PostUserParams, principal *models.Principal) middleware.Responder {
+	return fn(params, principal)
 }
 
 // PostUserHandler interface for that can handle valid post user params
 type PostUserHandler interface {
-	Handle(PostUserParams) middleware.Responder
+	Handle(PostUserParams, *models.Principal) middleware.Responder
 }
 
 // NewPostUser creates a new http.Handler for the post user operation
@@ -46,12 +48,25 @@ func (o *PostUser) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 	var Params = NewPostUserParams()
 
+	uprinc, aCtx, err := o.Context.Authorize(r, route)
+	if err != nil {
+		o.Context.Respond(rw, r, route.Produces, route, err)
+		return
+	}
+	if aCtx != nil {
+		r = aCtx
+	}
+	var principal *models.Principal
+	if uprinc != nil {
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
+	}
+
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params) // actually handle the request
+	res := o.Handler.Handle(Params, principal) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 

@@ -9,19 +9,21 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
+
+	models "github.com/capella/topcrush/models"
 )
 
 // PutUserIDLocationHandlerFunc turns a function with the right signature into a put user ID location handler
-type PutUserIDLocationHandlerFunc func(PutUserIDLocationParams) middleware.Responder
+type PutUserIDLocationHandlerFunc func(PutUserIDLocationParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn PutUserIDLocationHandlerFunc) Handle(params PutUserIDLocationParams) middleware.Responder {
-	return fn(params)
+func (fn PutUserIDLocationHandlerFunc) Handle(params PutUserIDLocationParams, principal *models.Principal) middleware.Responder {
+	return fn(params, principal)
 }
 
 // PutUserIDLocationHandler interface for that can handle valid put user ID location params
 type PutUserIDLocationHandler interface {
-	Handle(PutUserIDLocationParams) middleware.Responder
+	Handle(PutUserIDLocationParams, *models.Principal) middleware.Responder
 }
 
 // NewPutUserIDLocation creates a new http.Handler for the put user ID location operation
@@ -46,12 +48,25 @@ func (o *PutUserIDLocation) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 	var Params = NewPutUserIDLocationParams()
 
+	uprinc, aCtx, err := o.Context.Authorize(r, route)
+	if err != nil {
+		o.Context.Respond(rw, r, route.Produces, route, err)
+		return
+	}
+	if aCtx != nil {
+		r = aCtx
+	}
+	var principal *models.Principal
+	if uprinc != nil {
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
+	}
+
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params) // actually handle the request
+	res := o.Handler.Handle(Params, principal) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 

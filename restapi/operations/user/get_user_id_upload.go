@@ -9,19 +9,21 @@ import (
 	"net/http"
 
 	middleware "github.com/go-openapi/runtime/middleware"
+
+	models "github.com/capella/topcrush/models"
 )
 
 // GetUserIDUploadHandlerFunc turns a function with the right signature into a get user ID upload handler
-type GetUserIDUploadHandlerFunc func(GetUserIDUploadParams) middleware.Responder
+type GetUserIDUploadHandlerFunc func(GetUserIDUploadParams, *models.Principal) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetUserIDUploadHandlerFunc) Handle(params GetUserIDUploadParams) middleware.Responder {
-	return fn(params)
+func (fn GetUserIDUploadHandlerFunc) Handle(params GetUserIDUploadParams, principal *models.Principal) middleware.Responder {
+	return fn(params, principal)
 }
 
 // GetUserIDUploadHandler interface for that can handle valid get user ID upload params
 type GetUserIDUploadHandler interface {
-	Handle(GetUserIDUploadParams) middleware.Responder
+	Handle(GetUserIDUploadParams, *models.Principal) middleware.Responder
 }
 
 // NewGetUserIDUpload creates a new http.Handler for the get user ID upload operation
@@ -46,12 +48,25 @@ func (o *GetUserIDUpload) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 	var Params = NewGetUserIDUploadParams()
 
+	uprinc, aCtx, err := o.Context.Authorize(r, route)
+	if err != nil {
+		o.Context.Respond(rw, r, route.Produces, route, err)
+		return
+	}
+	if aCtx != nil {
+		r = aCtx
+	}
+	var principal *models.Principal
+	if uprinc != nil {
+		principal = uprinc.(*models.Principal) // this is really a models.Principal, I promise
+	}
+
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params) // actually handle the request
+	res := o.Handler.Handle(Params, principal) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
