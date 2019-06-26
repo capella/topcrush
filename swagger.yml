@@ -515,7 +515,6 @@ definitions:
           type: string
 
   error:
-  error:
     type: object
     required:
       - message
