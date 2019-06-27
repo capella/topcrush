@@ -28,12 +28,17 @@ type UserPrivate struct {
 	// Read Only: true
 	Boasts []strfmt.DateTime `json:"boasts"`
 
+	// has subscription
+	// Read Only: true
+	HasSubscription *bool `json:"hasSubscription,omitempty"`
+
 	// is the last time the user change it birthDate, user cannot change it a high frequency
 	// Read Only: true
 	// Format: date
 	LastBirthDateChange strfmt.Date `json:"lastBirthDateChange,omitempty"`
 
 	// last position
+	// Read Only: true
 	LastPosition *Position `json:"lastPosition,omitempty"`
 
 	// matchs
@@ -73,6 +78,8 @@ func (m *UserPrivate) UnmarshalJSON(raw []byte) error {
 
 		Boasts []strfmt.DateTime `json:"boasts"`
 
+		HasSubscription *bool `json:"hasSubscription,omitempty"`
+
 		LastBirthDateChange strfmt.Date `json:"lastBirthDateChange,omitempty"`
 
 		LastPosition *Position `json:"lastPosition,omitempty"`
@@ -94,6 +101,8 @@ func (m *UserPrivate) UnmarshalJSON(raw []byte) error {
 	m.BirthDate = dataAO1.BirthDate
 
 	m.Boasts = dataAO1.Boasts
+
+	m.HasSubscription = dataAO1.HasSubscription
 
 	m.LastBirthDateChange = dataAO1.LastBirthDateChange
 
@@ -127,6 +136,8 @@ func (m UserPrivate) MarshalJSON() ([]byte, error) {
 
 		Boasts []strfmt.DateTime `json:"boasts"`
 
+		HasSubscription *bool `json:"hasSubscription,omitempty"`
+
 		LastBirthDateChange strfmt.Date `json:"lastBirthDateChange,omitempty"`
 
 		LastPosition *Position `json:"lastPosition,omitempty"`
@@ -145,6 +156,8 @@ func (m UserPrivate) MarshalJSON() ([]byte, error) {
 	dataAO1.BirthDate = m.BirthDate
 
 	dataAO1.Boasts = m.Boasts
+
+	dataAO1.HasSubscription = m.HasSubscription
 
 	dataAO1.LastBirthDateChange = m.LastBirthDateChange
 

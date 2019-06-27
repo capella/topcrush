@@ -25,11 +25,16 @@ type UserInternal struct {
 	Deslikes []strfmt.ObjectId `json:"deslikes"`
 
 	// facebook ID
+	// Read Only: true
 	FacebookID string `json:"facebookID,omitempty"`
 
 	// likes
 	// Read Only: true
 	Likes []strfmt.ObjectId `json:"likes"`
+
+	// store the subscription data
+	// Read Only: true
+	Subscription string `json:"subscription,omitempty"`
 
 	// superlikes
 	// Read Only: true
@@ -53,6 +58,8 @@ func (m *UserInternal) UnmarshalJSON(raw []byte) error {
 
 		Likes []strfmt.ObjectId `json:"likes"`
 
+		Subscription string `json:"subscription,omitempty"`
+
 		Superlikes []strfmt.ObjectId `json:"superlikes"`
 	}
 	if err := swag.ReadJSON(raw, &dataAO1); err != nil {
@@ -64,6 +71,8 @@ func (m *UserInternal) UnmarshalJSON(raw []byte) error {
 	m.FacebookID = dataAO1.FacebookID
 
 	m.Likes = dataAO1.Likes
+
+	m.Subscription = dataAO1.Subscription
 
 	m.Superlikes = dataAO1.Superlikes
 
@@ -87,6 +96,8 @@ func (m UserInternal) MarshalJSON() ([]byte, error) {
 
 		Likes []strfmt.ObjectId `json:"likes"`
 
+		Subscription string `json:"subscription,omitempty"`
+
 		Superlikes []strfmt.ObjectId `json:"superlikes"`
 	}
 
@@ -95,6 +106,8 @@ func (m UserInternal) MarshalJSON() ([]byte, error) {
 	dataAO1.FacebookID = m.FacebookID
 
 	dataAO1.Likes = m.Likes
+
+	dataAO1.Subscription = m.Subscription
 
 	dataAO1.Superlikes = m.Superlikes
 

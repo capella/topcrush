@@ -715,7 +715,8 @@ func init() {
               "readOnly": true
             },
             "facebookID": {
-              "type": "string"
+              "type": "string",
+              "readOnly": true
             },
             "likes": {
               "type": "array",
@@ -724,6 +725,11 @@ func init() {
                 "type": "string",
                 "format": "ObjectId"
               },
+              "readOnly": true
+            },
+            "subscription": {
+              "description": "store the subscription data",
+              "type": "string",
               "readOnly": true
             },
             "superlikes": {
@@ -760,6 +766,10 @@ func init() {
               },
               "readOnly": true
             },
+            "hasSubscription": {
+              "type": "boolean",
+              "readOnly": true
+            },
             "lastBirthDateChange": {
               "description": "is the last time the user change it birthDate, user cannot change it a high frequency",
               "type": "string",
@@ -767,7 +777,8 @@ func init() {
               "readOnly": true
             },
             "lastPosition": {
-              "$ref": "#/definitions/position"
+              "$ref": "#/definitions/position",
+              "readOnly": true
             },
             "matchs": {
               "type": "array",
@@ -1551,7 +1562,8 @@ func init() {
               "readOnly": true
             },
             "facebookID": {
-              "type": "string"
+              "type": "string",
+              "readOnly": true
             },
             "likes": {
               "type": "array",
@@ -1560,6 +1572,11 @@ func init() {
                 "type": "string",
                 "format": "ObjectId"
               },
+              "readOnly": true
+            },
+            "subscription": {
+              "description": "store the subscription data",
+              "type": "string",
               "readOnly": true
             },
             "superlikes": {
@@ -1596,6 +1613,10 @@ func init() {
               },
               "readOnly": true
             },
+            "hasSubscription": {
+              "type": "boolean",
+              "readOnly": true
+            },
             "lastBirthDateChange": {
               "description": "is the last time the user change it birthDate, user cannot change it a high frequency",
               "type": "string",
@@ -1603,7 +1624,8 @@ func init() {
               "readOnly": true
             },
             "lastPosition": {
-              "$ref": "#/definitions/position"
+              "$ref": "#/definitions/position",
+              "readOnly": true
             },
             "matchs": {
               "type": "array",

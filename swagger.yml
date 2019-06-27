@@ -424,6 +424,7 @@ definitions:
           description: is the last time the user change it birthDate, user cannot change it a high frequency
           readOnly: true
         lastPosition:
+          readOnly: true
           $ref: "#/definitions/position"
         radio:
           description: distance in km to find matches
@@ -464,6 +465,10 @@ definitions:
                 type: string
                 format: ObjectId
                 description: chat ID
+        hasSubscription:
+          type: boolean
+          readOnly: true
+
   userPublic:
     type: object
     allOf:
@@ -507,6 +512,11 @@ definitions:
             description: match user id
         facebookID:
           type: string
+          readOnly: true
+        subscription:
+          type: string
+          readOnly: true
+          description: store the subscription data
 
   error:
     type: object
