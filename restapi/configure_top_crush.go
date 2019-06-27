@@ -6,6 +6,8 @@ import (
 	"crypto/tls"
 	"net/http"
 
+	log "github.com/sirupsen/logrus"
+
 	errors "github.com/go-openapi/errors"
 	runtime "github.com/go-openapi/runtime"
 	middleware "github.com/go-openapi/runtime/middleware"
@@ -33,7 +35,7 @@ func configureAPI(api *operations.TopCrushAPI) http.Handler {
 	// Expected interface func(string, ...interface{})
 	//
 	// Example:
-	// api.Logger = log.Printf
+	api.Logger = log.Printf
 
 	api.JSONConsumer = runtime.JSONConsumer()
 
@@ -79,8 +81,8 @@ func configureAPI(api *operations.TopCrushAPI) http.Handler {
 			return middleware.NotImplemented("operation user.GetUser has not yet been implemented")
 		})
 	}
-	if api.UserGetUserIDUploadHandler == nil {
-		api.UserGetUserIDUploadHandler = user.GetUserIDUploadHandlerFunc(func(params user.GetUserIDUploadParams, principal *models.Principal) middleware.Responder {
+	if api.UserGetUserUploadHandler == nil {
+		api.UserGetUserUploadHandler = user.GetUserUploadHandlerFunc(func(params user.GetUserUploadParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation user.GetUserIDUpload has not yet been implemented")
 		})
 	}
@@ -135,6 +137,7 @@ func configureTLS(tlsConfig *tls.Config) {
 // This function can be called multiple times, depending on the number of serving schemes.
 // scheme value will be set accordingly: "http", "https" or "unix"
 func configureServer(s *http.Server, scheme, addr string) {
+
 }
 
 // The middleware configuration is for the handler executors. These do not apply to the swagger.json document.

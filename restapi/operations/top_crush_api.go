@@ -62,8 +62,8 @@ func NewTopCrushAPI(spec *loads.Document) *TopCrushAPI {
 		UserGetUserHandler: user.GetUserHandlerFunc(func(params user.GetUserParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation UserGetUser has not yet been implemented")
 		}),
-		UserGetUserIDUploadHandler: user.GetUserIDUploadHandlerFunc(func(params user.GetUserIDUploadParams, principal *models.Principal) middleware.Responder {
-			return middleware.NotImplemented("operation UserGetUserIDUpload has not yet been implemented")
+		UserGetUserUploadHandler: user.GetUserUploadHandlerFunc(func(params user.GetUserUploadParams, principal *models.Principal) middleware.Responder {
+			return middleware.NotImplemented("operation UserGetUserUpload has not yet been implemented")
 		}),
 		UserPostUserHandler: user.PostUserHandlerFunc(func(params user.PostUserParams, principal *models.Principal) middleware.Responder {
 			return middleware.NotImplemented("operation UserPostUser has not yet been implemented")
@@ -144,8 +144,8 @@ type TopCrushAPI struct {
 	SlideGetSlideUsersHandler slide.GetSlideUsersHandler
 	// UserGetUserHandler sets the operation handler for the get user operation
 	UserGetUserHandler user.GetUserHandler
-	// UserGetUserIDUploadHandler sets the operation handler for the get user ID upload operation
-	UserGetUserIDUploadHandler user.GetUserIDUploadHandler
+	// UserGetUserUploadHandler sets the operation handler for the get user upload operation
+	UserGetUserUploadHandler user.GetUserUploadHandler
 	// UserPostUserHandler sets the operation handler for the post user operation
 	UserPostUserHandler user.PostUserHandler
 	// ChatPutChatMessagesIDHandler sets the operation handler for the put chat messages ID operation
@@ -251,8 +251,8 @@ func (o *TopCrushAPI) Validate() error {
 		unregistered = append(unregistered, "user.GetUserHandler")
 	}
 
-	if o.UserGetUserIDUploadHandler == nil {
-		unregistered = append(unregistered, "user.GetUserIDUploadHandler")
+	if o.UserGetUserUploadHandler == nil {
+		unregistered = append(unregistered, "user.GetUserUploadHandler")
 	}
 
 	if o.UserPostUserHandler == nil {
@@ -426,7 +426,7 @@ func (o *TopCrushAPI) initHandlerCache() {
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
-	o.handlers["GET"]["/user/{id}/upload"] = user.NewGetUserIDUpload(o.context, o.UserGetUserIDUploadHandler)
+	o.handlers["GET"]["/user/upload"] = user.NewGetUserUpload(o.context, o.UserGetUserUploadHandler)
 
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)

@@ -411,6 +411,28 @@ func init() {
         }
       }
     },
+    "/user/upload": {
+      "get": {
+        "description": "get a image upload link\\nYou should add this link to the user images array and submit the user\\nif you want to upload a facebook photo put it CDN link the the array (the server will made a local copy)",
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "200": {
+            "description": "produce a pre-signed link for upload",
+            "schema": {
+              "$ref": "#/definitions/preSignedLink"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/user/{id}": {
       "put": {
         "description": "update the user information",
@@ -485,37 +507,6 @@ func init() {
             "description": "Forbidden",
             "schema": {
               "$ref": "#/definitions/error"
-            }
-          },
-          "default": {
-            "description": "generic error response",
-            "schema": {
-              "$ref": "#/definitions/error"
-            }
-          }
-        }
-      }
-    },
-    "/user/{id}/upload": {
-      "get": {
-        "description": "get a image upload link",
-        "tags": [
-          "user"
-        ],
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "ObjectId",
-            "name": "id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "produce a pre-signed link for upload",
-            "schema": {
-              "$ref": "#/definitions/preSignedLink"
             }
           },
           "default": {
@@ -1256,6 +1247,28 @@ func init() {
         }
       }
     },
+    "/user/upload": {
+      "get": {
+        "description": "get a image upload link\\nYou should add this link to the user images array and submit the user\\nif you want to upload a facebook photo put it CDN link the the array (the server will made a local copy)",
+        "tags": [
+          "user"
+        ],
+        "responses": {
+          "200": {
+            "description": "produce a pre-signed link for upload",
+            "schema": {
+              "$ref": "#/definitions/preSignedLink"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
     "/user/{id}": {
       "put": {
         "description": "update the user information",
@@ -1330,37 +1343,6 @@ func init() {
             "description": "Forbidden",
             "schema": {
               "$ref": "#/definitions/error"
-            }
-          },
-          "default": {
-            "description": "generic error response",
-            "schema": {
-              "$ref": "#/definitions/error"
-            }
-          }
-        }
-      }
-    },
-    "/user/{id}/upload": {
-      "get": {
-        "description": "get a image upload link",
-        "tags": [
-          "user"
-        ],
-        "parameters": [
-          {
-            "type": "integer",
-            "format": "ObjectId",
-            "name": "id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "produce a pre-signed link for upload",
-            "schema": {
-              "$ref": "#/definitions/preSignedLink"
             }
           },
           "default": {

@@ -19,15 +19,9 @@ security:
   - ApiKeyAuth: []
 
 paths: 
-  /user/{id}/upload:
+  /user/upload:
     get:
-      description: get a image upload link
-      parameters:
-        - type: integer
-          format: ObjectId
-          name: id
-          in: path
-          required: true
+      description: get a image upload link\nYou should add this link to the user images array and submit the user\nif you want to upload a facebook photo put it CDN link the the array (the server will made a local copy)
       tags:
         - user
       responses:
